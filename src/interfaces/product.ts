@@ -1,6 +1,10 @@
 export interface IDataProduct {
   data: IProduct[],
-  error: string | null
+  error: string | null,
+  pagination: {
+    count: number,
+    iniRow: number
+  }
 }
 
 export interface IProduct {

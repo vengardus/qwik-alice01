@@ -35,3 +35,7 @@ input[type=button], input[type=submit], input[type=reset], button, button[type=s
 input {
   color: black;
 }
+
+:disabled {
+  background-color: gray;
+}

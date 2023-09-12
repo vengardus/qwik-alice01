@@ -3,3 +3,9 @@ export const ACTION = {
   update: 'update',
   delete: 'delete',
 }
+
+export const PAGINATION = {
+  limit: 5,
+  next: 'next',
+  prev: 'prev'
+}

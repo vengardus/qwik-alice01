@@ -5,20 +5,30 @@ import { supabaseClient } from '~/utils/supabase';
 import { type ISupabase } from '~/interfaces/supabase';
 import type { IDataProduct, IProduct } from '~/interfaces/product';
 import { ListProduct } from '~/components/products/ListProduct';
-import { ACTION } from '~/business/globals';
+import { ACTION, PAGINATION } from '~/business/globals';
 
 
 export const useGetProducts = routeLoader$<IDataProduct>(async (requestEvent) => {
   const supabase = supabaseClient(requestEvent);
+  console.log('query.iniRow', requestEvent.query.get('iniRow'));
+  let iniRow = Number(requestEvent.query.get('iniRow') || '0')
+  if ( iniRow < 0 || isNaN(iniRow) ) iniRow = 0;
+  
+  console.log('loader', iniRow)
+
   const data = await supabase
     .from('products')
     .select('*', {count:'exact'})
     .order('name') 
-    .range(0, 9) as ISupabase
-  console.log(data);
+    .range(iniRow, iniRow+PAGINATION.limit-1 ) as ISupabase
+  console.log('data.count', data.count);
   return {
     data: data.data ?? [],
-    error: data.error?.message ?? null
+    error: data.error?.message ?? null,
+    pagination: {
+      count: data.count,
+      iniRow: iniRow
+    }
   };
 })
 
@@ -146,6 +156,7 @@ export default component$(() => {
               products={productsSignal.value}
               actionEdit$={(product: IProduct) => actionEdit(product)}
               actionDelete$={(id: number) => actionDelete(id)}
+              pagination={ productsSignal.value.pagination}
             />
         }
       </div>
