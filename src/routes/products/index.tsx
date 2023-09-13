@@ -5,23 +5,22 @@ import { supabaseClient } from '~/utils/supabase';
 import { type ISupabase } from '~/interfaces/supabase';
 import type { IDataProduct, IProduct } from '~/interfaces/product';
 import { ListProduct } from '~/components/products/ListProduct';
-import { ACTION, PAGINATION } from '~/business/globals';
+import { ACTION, PAGINATION } from '~/business/general';
 
 
 export const useGetProducts = routeLoader$<IDataProduct>(async (requestEvent) => {
   const supabase = supabaseClient(requestEvent);
-  console.log('query.iniRow', requestEvent.query.get('iniRow'));
   let iniRow = Number(requestEvent.query.get('iniRow') || '0')
-  if ( iniRow < 0 || isNaN(iniRow) ) iniRow = 0;
-  
+  if (iniRow < 0 || isNaN(iniRow)) iniRow = 0;
+
   console.log('loader', iniRow)
 
   const data = await supabase
     .from('products')
-    .select('*', {count:'exact'})
-    .order('name') 
-    .range(iniRow, iniRow+PAGINATION.limit-1 ) as ISupabase
-  console.log('data.count', data.count);
+    .select('*', { count: 'exact' })
+    .order('name')
+    .range(iniRow, iniRow + PAGINATION.limit - 1) as ISupabase
+
   return {
     data: data.data ?? [],
     error: data.error?.message ?? null,
@@ -107,7 +106,7 @@ const deleteProduct = server$(async function (id: number) {
     .eq('id', id)
   console.log('delete:', data);
 
-  return (data.status==204)? true:false;
+  return (data.status == 204) ? true : false;
 })
 
 
@@ -121,7 +120,7 @@ export default component$(() => {
   const nameSignal = useSignal('');
   const currencySignal = useSignal('PEN');
   const priceSignal = useSignal('');
-  const nav= useNavigate()
+  const nav = useNavigate()
 
   const actionEdit = $((product: IProduct) => {
     idSignal.value = product.id.toString();
@@ -132,9 +131,9 @@ export default component$(() => {
   })
 
   const actionDelete = $(async (id: number) => {
-    
+
     const deleteOk = await deleteProduct(id);
-    alert(deleteOk? 'Producto eliminado satisfactoriamente.' : 'Error al eliminar producto.')
+    alert(deleteOk ? 'Producto eliminado satisfactoriamente.' : 'Error al eliminar producto.')
     if (deleteOk)
       nav();
   })
@@ -156,7 +155,7 @@ export default component$(() => {
               products={productsSignal.value}
               actionEdit$={(product: IProduct) => actionEdit(product)}
               actionDelete$={(id: number) => actionDelete(id)}
-              pagination={ productsSignal.value.pagination}
+              pagination={productsSignal.value.pagination}
             />
         }
       </div>
@@ -186,11 +185,18 @@ export default component$(() => {
             <input name="price" bind: value={priceSignal} />
           </div>
 
-          <button type="submit" class='button'>{(typeAction.value == ACTION.insert) ? 'Agregar Producto' : 'Modificar Producto'}</button>
+          <button type="submit" class='button'>{
+            (typeAction.value == ACTION.insert)
+              ? 'Agregar Producto'
+              : 'Modificar Producto'
+          }</button>
         </Form>
 
         {actionSubmit.value?.success
-          ? <p>{(typeAction.value == ACTION.insert) ? 'Product agregado satisfactoriamente.' : 'Producto modificado satisfactoriamenete.'} </p>
+          ? <p>{(typeAction.value == ACTION.insert)
+            ? 'Product agregado satisfactoriamente.'
+            : 'Producto modificado satisfactoriamenete.'}
+          </p>
           : <div>{actionSubmit.value?.message}</div>
         }
 

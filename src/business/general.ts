@@ -5,7 +5,7 @@ export const ACTION = {
 }
 
 export const PAGINATION = {
-  limit: 5,
+  limit: 7,
   next: 'next',
   prev: 'prev'
 }

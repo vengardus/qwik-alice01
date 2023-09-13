@@ -1,9 +1,8 @@
-import { type PropFunction, component$, $ } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
-import { PAGINATION } from "~/business/globals";
-import type { IPagination } from "~/interfaces/global";
+import { type PropFunction, component$ } from "@builder.io/qwik";
+import type { IPagination } from "~/interfaces/general";
 import type { IDataProduct } from "~/interfaces/product";
 import { DetailProduct } from "./DetailProduct";
+import { Pagination } from "../general/Pagination";
 
 
 interface IProps {
@@ -14,69 +13,35 @@ interface IProps {
   pagination: IPagination,
 }
 
-export const ListProduct = component$(({
-  products,
-  // grid actions
-  actionEdit$,
-  actionDelete$,
-  pagination,
-}: IProps) => {
-  const nav = useNavigate();
-
-  const changePage = $((action: string) => {
-    if (action == PAGINATION.next)
-      nav(`/products?iniRow=${pagination.iniRow + PAGINATION.limit}`)
-    else {  
-      // page prev
-      pagination.iniRow -= PAGINATION.limit;
-      pagination.iniRow = (pagination.iniRow < 0)? 0 : pagination.iniRow;
-      nav(`/products?iniRow=${pagination.iniRow}`)
-    }
-  })
-
+export const ListProduct = component$((props: IProps) => {
 
   return (
     <div>
       <h1 class='text-center'>Productos</h1>
       {
-        !products.data.length
+        !props.products.data.length
           ? <div>No se encontraron productos</div>
           :
-          <>
+          <div class='flex flex-col space-y-5'>
             <div class='flex flex-col space-y-2'>
               {
-                products.data.map(product => 
-                  <DetailProduct 
+                props.products.data.map(product =>
+                  <DetailProduct
                     key={product.id}
                     product={product}
-                    actionEdit$={actionEdit$}
-                    actionDelete$={actionDelete$}
-                  />                  
+                    actionEdit$={props.actionEdit$}
+                    actionDelete$={props.actionDelete$}
+                  />
                 )
               }
             </div>
 
-            <div class='flex pt-4 justify-start space-x-2'>
-              <span>
-                {((pagination.iniRow + PAGINATION.limit) > pagination.count)
-                  ? pagination.count
-                  : pagination.iniRow + PAGINATION.limit
-                }
-              </span>
-              <span>de</span>
-              <span>{pagination.count}</span>
-            </div>
-            <div class='flex py-4 justify-center space-x-5'>
-              <button onClick$={() => changePage(PAGINATION.prev)}
-                disabled={(pagination.iniRow <= 0) ? true : false}>
-                Anteriores
-              </button>
-              <button onClick$={() => changePage(PAGINATION.next)}
-                disabled={(pagination.iniRow + PAGINATION.limit >= pagination.count) ? true : false}>
-                Siguientes
-              </button>
-            </div>
-          </>
+            <Pagination
+              pagination={props.pagination}
+              url="/products"
+            />
+
+          </div>
       }
     </div>
   )
