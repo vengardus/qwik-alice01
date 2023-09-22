@@ -1,4 +1,4 @@
-import { component$, useSignal, $ } from '@builder.io/qwik';
+import { component$, useSignal, $, useTask$, useStore } from '@builder.io/qwik';
 import { Form, routeAction$, routeLoader$, server$, useLocation, useNavigate, z, zod$ } from '@builder.io/qwik-city';
 
 import { supabaseClient } from '~/utils/supabase';
@@ -6,40 +6,39 @@ import { type ISupabase } from '~/interfaces/supabase';
 import type { IDataProduct, IProduct } from '~/interfaces/product';
 import { ListProduct } from '~/components/products/ListProduct';
 import { ACTION, PAGINATION } from '~/business/general';
+import { validateProduct } from '~/business/product';
 
 
 export const useGetProducts = routeLoader$<IDataProduct>(async (requestEvent) => {
   const supabase = supabaseClient(requestEvent);
   let iniRow = Number(requestEvent.query.get('iniRow') || '0')
-  if (iniRow < 0 || isNaN(iniRow)) iniRow = 0;
-
-  console.log('loader', iniRow)
-
+  if (isNaN(iniRow) || iniRow < 0) iniRow = 0;
+  const offSet = iniRow + PAGINATION.limit - 1;
   const data = await supabase
     .from('products')
-    .select('*', { count: 'exact' })
-    .order('name')
-    .range(iniRow, iniRow + PAGINATION.limit - 1) as ISupabase
-
+    .select('*')
+    .order('name') as ISupabase
+  console.log('routerLoad:', iniRow, offSet, 'data.count')
   return {
     data: data.data ?? [],
     error: data.error?.message ?? null,
     pagination: {
-      count: data.count,
+      count: 100,
       iniRow: iniRow
     }
   };
 })
 
 export const useActionProduct = routeAction$(async (product, requestEvent) => {
-  const priceToNumber = Number(product.price);
+  const rsptaValidate = validateProduct(product)
+  if (!rsptaValidate.success)
+    return rsptaValidate
 
-  // extra validate fields 
-  if (Number.isNaN(priceToNumber)) {
-    return {
-      success: false,
-      message: 'Error en precio'
-    }
+  const newProduct = {
+    name: rsptaValidate.data.name,
+    description: rsptaValidate.data.name,
+    price: rsptaValidate.data.price,
+    currency: rsptaValidate.data.currency,
   }
 
   if (product.typeAction == ACTION.insert) {
@@ -47,17 +46,8 @@ export const useActionProduct = routeAction$(async (product, requestEvent) => {
     const supabase = supabaseClient(requestEvent);
     const data = await supabase
       .from('products')
-      .insert([
-        {
-          name: product.name,
-          description: product.name,
-          price: priceToNumber,
-          currency: product.currency,
-        },
-      ])
+      .insert([newProduct])
       .select()
-
-    console.log(data);
     return {
       success: (data.status == 201) ? true : false,
     }
@@ -72,7 +62,7 @@ export const useActionProduct = routeAction$(async (product, requestEvent) => {
         {
           name: product.name,
           description: product.name,
-          price: priceToNumber,
+          price: rsptaValidate.data.price,
           currency: product.currency,
         }
       )
@@ -121,6 +111,7 @@ export default component$(() => {
   const currencySignal = useSignal('PEN');
   const priceSignal = useSignal('');
   const nav = useNavigate()
+  const deleteSignal = useSignal(false)
 
   const actionEdit = $((product: IProduct) => {
     idSignal.value = product.id.toString();
@@ -134,17 +125,40 @@ export default component$(() => {
 
     const deleteOk = await deleteProduct(id);
     alert(deleteOk ? 'Producto eliminado satisfactoriamente.' : 'Error al eliminar producto.')
-    if (deleteOk)
-      nav();
+    if (deleteOk) {
+      console.log('pre-nav')
+      await nav();
+      deleteSignal.value = true
+      console.log('post-nav')
+    }
   })
 
   const clearInputs = $(() => {
+    if (!actionSubmit.value?.success)
+      return;
+    return;
+
     idSignal.value = '';
     nameSignal.value = '';
     currencySignal.value = 'PEN';
-    priceSignal.value = '';
+    priceSignal.value = '';   
   });
 
+  // useTask$(({track})=>{
+  //   track(() => actionSubmit.value?.success);
+  //   if ( actionSubmit.value?.success) {
+  //     console.log('track', actionSubmit.value.success);
+  //     // nav();
+  //   }
+  // })
+
+  // useTask$(({track})=>{
+  //   track(() => productsSignal.value.data);
+  //   console.log('track productSignal', productsSignal.value.pagination)
+  // })
+
+
+  console.log('Index;', productsSignal.value.pagination)
   return (
     <div class='flex flex-row space-x-3 w-full px-4'>
       <div class='w-[70%] border border-gray-500'>
@@ -152,7 +166,7 @@ export default component$(() => {
           location.isNavigating
             ? <div class=''>Loading...</div>
             : <ListProduct
-              products={productsSignal.value}
+              products={productsSignal.value.data}
               actionEdit$={(product: IProduct) => actionEdit(product)}
               actionDelete$={(id: number) => actionDelete(id)}
               pagination={productsSignal.value.pagination}
