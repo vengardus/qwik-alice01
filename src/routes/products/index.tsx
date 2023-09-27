@@ -1,12 +1,12 @@
-import { component$, useSignal, $, useTask$, useStore } from '@builder.io/qwik';
+import { component$, useSignal, $ } from '@builder.io/qwik';
 import { Form, routeAction$, routeLoader$, server$, useLocation, useNavigate, z, zod$ } from '@builder.io/qwik-city';
 
 import { supabaseClient } from '~/utils/supabase';
 import { type ISupabase } from '~/interfaces/supabase';
 import type { IDataProduct, IProduct } from '~/interfaces/product';
 import { ListProduct } from '~/components/products/ListProduct';
-import { ACTION, PAGINATION } from '~/business/general';
-import { validateProduct } from '~/business/product';
+import { ACTION, PAGINATION } from '~/domain/app.config';
+import { validateProduct } from '~/domain/product';
 
 
 export const useGetProducts = routeLoader$<IDataProduct>(async (requestEvent) => {

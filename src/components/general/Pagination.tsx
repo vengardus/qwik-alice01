@@ -1,6 +1,6 @@
 import { component$, $ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import { PAGINATION } from "~/business/general";
+import { PAGINATION } from "~/domain/app.config";
 import type { IPagination } from "~/interfaces/general";
 
 interface IProps {

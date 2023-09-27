@@ -1,4 +1,4 @@
-import { type PropFunction, component$, type Signal } from "@builder.io/qwik";
+import { type PropFunction, component$ } from "@builder.io/qwik";
 import type { IPagination } from "~/interfaces/general";
 import type { IProduct } from "~/interfaces/product";
 import { DetailProduct } from "./DetailProduct";
