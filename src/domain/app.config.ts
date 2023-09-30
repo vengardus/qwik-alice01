@@ -12,7 +12,7 @@ export const PAGINATION = {
 
 export class AppConfig  {
   static PAGINATION = {
-    limit: 4,
+    limit: 7,
     next: 'next',
     prev: 'prev'
   }

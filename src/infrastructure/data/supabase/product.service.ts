@@ -13,7 +13,7 @@ export class ProductService {
     const data = await supabase
           .from('products')
           .select('*')
-          .order('id') as ISupabaseResponse
+          .order('name') as ISupabaseResponse
 
     return {
       data: data.data,
@@ -24,12 +24,13 @@ export class ProductService {
   }
 
   async getAllPagination({offset=0, limit=1}): Promise<IDataResponse> {
+    console.log(`service: offset:${offset} limit:${limit}`)
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
       .from('products')
       .select('*', { count: 'exact' })
       .range(offset, offset+limit-1)
-      .order('id') as ISupabaseResponse
+      .order('name', {ascending:true}) as ISupabaseResponse
 
     return {
       data: data.data,
@@ -40,6 +41,18 @@ export class ProductService {
       success: data.error ? false : true,
       message: data.error?.message ?? null
     }
+  }
+
+  async getAllPagination2({offset=0, limit=1}) {
+    console.log(`service: offset:${offset} limit:${limit}`)
+    const supabase = Supabase.connect(this.requestEvent)
+    const data = await supabase
+      .from('products')
+      .select('*', { count: 'exact' })
+      .range(offset, offset+limit-1)
+      .order('name', {ascending:true}) as ISupabaseResponse
+
+    return data
   }
 
   async insert(object: IRegisterProductDto): Promise<IDataResponse> {
