@@ -35,36 +35,8 @@ export class ProductController {
 
     return ProductMapper.ListProductDtoFromDataResponse(data)
   }
-
+  
   async insert(object: { [key: string]: any; }):
-    Promise<{
-      dataResponse: IDataResponse,
-      dataRefresh: IListProductDto | null
-    }> {
-    const [messageError, registerProductDto] = Product.validateObject(object)
-    if (messageError) return {
-      dataResponse: {
-        data: null,
-        success: false,
-        message: messageError,
-        pagination: null
-      },
-      dataRefresh: null
-    }
-
-    const oProductService = new ProductService(this.requestEvent)
-    const data = await oProductService.insert(registerProductDto!)
-    return {
-      dataResponse: data,
-      dataRefresh: data.success ? await this.getAllPagination({
-        offset: this.pagination.offset,
-        limit: this.pagination.limit
-      }) : null
-      // dataRefresh: data.success ? await this.getAll() : null
-    }
-  }
-
-  async insert2(object: { [key: string]: any; }):
     Promise<IDataResponse> {
     const [messageError, registerProductDto] = Product.validateObject(object)
     if (messageError) return {
@@ -79,22 +51,25 @@ export class ProductController {
     return data
   }
 
-  async delete(id: number):
-    Promise<{
-      dataResponse: IDataResponse,
-      dataRefresh: IListProductDto | null
-    }> {
-    const oProductService = new ProductService(this.requestEvent)
-    const data = await oProductService.delete(id)
-    return {
-      dataResponse: data,
-      dataRefresh: data.success ? await this.getAllPagination({ offset: 0, limit: 30 }) : null
+  async update(id:number, object: { [key: string]: any; }):
+    Promise<IDataResponse> {
+    const [messageError, registerProductDto] = Product.validateObject(object)
+    if (messageError) return {
+      data: null,
+      success: false,
+      message: messageError,
+      pagination: null
     }
+
+    const oProductService = new ProductService(this.requestEvent)
+    const data = await oProductService.update(id, registerProductDto!)
+    return data
   }
 
-  async delete2(id: number):Promise<IDataResponse> {
+  async delete(id: number):Promise<IDataResponse> {
     const oProductService = new ProductService(this.requestEvent)
     const data = await oProductService.delete(id)
+
     return data
   }
 }

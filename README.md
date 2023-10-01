@@ -16,7 +16,10 @@ pnpm run qwik add prisma
 pnpm run qwik add tailwind
 pnpm run qwik add auth
 // add 'optimizeDeps: { include: ['@auth/core'] }' en vite.config.ts
+
 pnpm add @supabase/supabase-js supabase-auth-helpers-qwik
+
+pnpm add csvtojson
 ```
 
 ## Memorex

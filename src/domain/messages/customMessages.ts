@@ -14,6 +14,16 @@ export class CustomMessages {
   static msgInsertError(msg='')  {
     return `Ocurrió un error, no se pudo agregar registro. ${msg}` 
   }
+  static msgUpdate() {
+    return 'Actualizando registro...'
+  }
+  static msgUpdateOk() {
+    return 'Registro actualizado satisfactoriamente.'
+  }
+  static msgUpdateError(msg='')  {
+    return `Ocurrió un error, no se pudo actualizar registro. ${msg}` 
+  }
+
   static msgDelete() {
     return 'Eliminando registro...'
   }

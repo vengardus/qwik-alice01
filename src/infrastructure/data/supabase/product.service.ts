@@ -70,6 +70,29 @@ export class ProductService {
     }
   }
 
+  async update(id:number, object: IRegisterProductDto): Promise<IDataResponse> {
+    const supabase = Supabase.connect(this.requestEvent)
+    const data = await supabase
+      .from('products')
+      .update(
+        {
+          name: object.name,
+          description: object.name,
+          price: object.price,
+          currency: object.currency,
+        }
+      )
+      .eq('id', id)
+
+    console.log('service.update', data)
+    return {
+      data: (data.data),
+      pagination: null,
+      success: (data.status == 204) ? true : false,
+      message: data.error?.message ?? ''
+    }
+  }
+
   async delete(id: number): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
