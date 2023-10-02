@@ -5,7 +5,7 @@
 }
 
 .modal-content {
-  @apply border shadow-lg rounded-md bg-white;
+  @apply border shadow-lg rounded-md bg-gray-800;
 }
 
 .modal-content-text {

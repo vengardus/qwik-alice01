@@ -22,5 +22,10 @@ export class AppConfig  {
     update: 'update',
     delete: 'delete',
   }
+ 
+  static LABELS = {
+    buttonCloseModalInfo: 'Ok',
+    buttonCloseModalForm: 'Regresar'
+  }
   
 }
