@@ -24,11 +24,11 @@ export const ListViewFooter = component$<ListViewFooterProps>(({
 
       <button onClick$={() => paginationAction$(AppConfig.PAGINATION.prev)}
         disabled={(paginationStore.offset <= 0) ? true : false}>
-        Anteriores
+        Anterior
       </button>
       <button onClick$={() => paginationAction$(AppConfig.PAGINATION.next)}
         disabled={(paginationStore.offset + AppConfig.PAGINATION.limit >= paginationStore.count) ? true : false}>
-        Siguientes
+        Siguiente
       </button>
     </div>
   );

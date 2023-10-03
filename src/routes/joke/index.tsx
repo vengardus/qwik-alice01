@@ -2,9 +2,13 @@ import { component$, useContext, useSignal, useStore, useStylesScoped$, useTask$
 import { Form, routeAction$, routeLoader$, server$ } from '@builder.io/qwik-city';
 import styles from "./index.css?inline";
 import { Joke } from '~/components/joke/Joke';
-import { type IJoke } from '~/interfaces/joke';
 import { jokeContext } from './layout';
 
+export interface IJoke {
+  id: string;
+  status: number;
+  joke: string;
+}
 
 export const useDadJoke = routeLoader$(async () => {
   const response = await fetch('https://icanhazdadjoke.com/', {

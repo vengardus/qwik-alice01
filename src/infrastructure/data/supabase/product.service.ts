@@ -11,9 +11,9 @@ export class ProductService {
   async getAll(): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-          .from('products')
-          .select('*')
-          .order('name') as ISupabaseResponse
+      .from('products')
+      .select('*')
+      .order('name') as ISupabaseResponse
 
     return {
       data: data.data,
@@ -23,14 +23,14 @@ export class ProductService {
     }
   }
 
-  async getAllPagination({offset=0, limit=1}): Promise<IDataResponse> {
-    console.log(`service: offset:${offset} limit:${limit}`)
+  async getAllPagination({ offset = 0, limit = 1 })
+    : Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
       .from('products')
       .select('*', { count: 'exact' })
-      .range(offset, offset+limit-1)
-      .order('name', {ascending:true}) as ISupabaseResponse
+      .range(offset, offset + limit - 1)
+      .order('name', { ascending: true }) as ISupabaseResponse
 
     return {
       data: data.data,
@@ -41,18 +41,6 @@ export class ProductService {
       success: data.error ? false : true,
       message: data.error?.message ?? null
     }
-  }
-
-  async getAllPagination2({offset=0, limit=1}) {
-    console.log(`service: offset:${offset} limit:${limit}`)
-    const supabase = Supabase.connect(this.requestEvent)
-    const data = await supabase
-      .from('products')
-      .select('*', { count: 'exact' })
-      .range(offset, offset+limit-1)
-      .order('name', {ascending:true}) as ISupabaseResponse
-
-    return data
   }
 
   async insert(object: IRegisterProductDto): Promise<IDataResponse> {
@@ -70,7 +58,7 @@ export class ProductService {
     }
   }
 
-  async update(id:number, object: IRegisterProductDto): Promise<IDataResponse> {
+  async update(id: number, object: IRegisterProductDto): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
       .from('products')
@@ -84,7 +72,6 @@ export class ProductService {
       )
       .eq('id', id)
 
-    console.log('service.update', data)
     return {
       data: (data.data),
       pagination: null,

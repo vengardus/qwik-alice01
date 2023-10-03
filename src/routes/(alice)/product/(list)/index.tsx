@@ -68,7 +68,7 @@ export const useRegisterProduct = routeAction$(async (product, requestEvent) => 
         name: z.string().min(3, 'Mínimo 3 caracter'),
         description: z.string().min(3, 'Mínimo 3 caracter'),
         currency: z.string().min(3, 'Debe tener 3 caracteres').max(3, 'Debe tener 3 caracteres'),
-        price: z.string(),
+        price: z.string().min(1, 'Debe ingresar precio'),
         typeAction: z.string(),
         id: z.string(),
         paginationOffset: z.string(),

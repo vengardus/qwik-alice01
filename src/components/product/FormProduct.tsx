@@ -34,12 +34,26 @@ export const FormProduct = component$<FormProductProps>(({
 
     const clearInputs = $(() => {
         idSignal.value = '';
+        descriptionSignal.value = '';
         nameSignal.value = '';
         currencySignal.value = 'PEN';
         priceSignal.value = '';
     })
 
     const postUseRegisterProduct = $(async () => {
+        msgFormSignal.value = ''
+        if (submitAction.value?.failed) {
+            if (submitAction.value.fieldErrors?.name)
+                msgFormSignal.value = `Name: ${submitAction.value.fieldErrors.name}`
+            else if (submitAction.value.fieldErrors?.description)
+                msgFormSignal.value = `Description: ${submitAction.value.fieldErrors.description}`
+            else if (submitAction.value.fieldErrors?.currency)
+                msgFormSignal.value = `Currency: ${submitAction.value.fieldErrors.currency}`
+            else if (submitAction.value.fieldErrors?.price)
+                msgFormSignal.value = `Price: ${submitAction.value.fieldErrors.price}`
+            return
+        }
+
         if (!submitAction.value?.dataResponse?.success) {
             msgFormSignal.value = (typeActionSignal.value == AppConfig.ACTION.insert)
                 ? `${CustomMessages.msgInsertError()}: ${submitAction.value?.dataResponse?.message}`
@@ -57,8 +71,8 @@ export const FormProduct = component$<FormProductProps>(({
     return (
         <div class="w-full">
             <h1 class='text-center'>{(typeActionSignal.value == AppConfig.ACTION.insert)
-                ? 'Nuevo Producto'
-                : 'Modificar Producto'
+                ? 'Nuevo Registro'
+                : 'Modificar Registro'
             }</h1>
             <Form
                 action={submitAction}
@@ -91,44 +105,23 @@ export const FormProduct = component$<FormProductProps>(({
 
                 <button type="submit" class='button'>{
                     (typeActionSignal.value == AppConfig.ACTION.insert)
-                        ? 'Agregar Producto'
-                        : 'Modificar Producto'
+                        ? 'Agregar'
+                        : 'Actualizar'
                 }</button>
 
                 <div>{msgFormSignal.value}</div>
             </Form>
 
-            <div class='mt-3'>
-                {
-                    submitAction.isRunning ? <div>{
-                        (typeActionSignal.value == AppConfig.ACTION.insert)
-                            ? CustomMessages.msgInsert()
-                            : CustomMessages.msgUpdate()
-                    }</div> : <div></div>
-                }
-                {
-                    submitAction.value?.failed
-                    && submitAction.value.fieldErrors?.name
-                    && <p>Name: {submitAction.value.fieldErrors.name}</p>
-                }
-                {
-                    submitAction.value?.failed
-                    && submitAction.value.fieldErrors?.description
-                    && <p>Description: {submitAction.value.fieldErrors.description}</p>
-                }
-                {
-                    submitAction.value?.failed
-                    && submitAction.value.fieldErrors?.currency
-                    && <p>Currency: {submitAction.value.fieldErrors.currency}</p>
+            <>
+            { 
+                submitAction.isRunning
+                    ? (typeActionSignal.value == AppConfig.ACTION.insert)
+                        ? CustomMessages.msgInsert() 
+                        : CustomMessages.msgUpdate()
+                    : '' 
+            } 
+            </>
 
-                }
-                {
-                    submitAction.value?.failed
-                    && submitAction.value.fieldErrors?.price
-                    && <p>Price: {submitAction.value.fieldErrors.price}</p>
-
-                }
-            </div>
         </div>
     );
 });
