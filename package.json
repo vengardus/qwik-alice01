@@ -19,9 +19,6 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "postinstall": "prisma generate",
     "preview": "qwik build preview && vite preview --open",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:migrate:prod": "prisma migrate deploy",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
@@ -31,7 +28,6 @@
     "@builder.io/qwik-auth": "0.1.0",
     "@builder.io/qwik-city": "^1.2.7",
     "@netlify/edge-functions": "^2.0.0",
-    "@prisma/client": "4.16.1",
     "@types/eslint": "8.44.1",
     "@types/node": "^20.4.5",
     "@typescript-eslint/eslint-plugin": "6.2.0",
