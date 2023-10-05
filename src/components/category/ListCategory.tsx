@@ -1,23 +1,23 @@
 import { type PropFunction, component$ } from "@builder.io/qwik";
-import { ItemProduct } from "./ItemProduct";
+import { ItemCategory } from "./ItemCategory";
 import { ListViewFooter } from "../shared/listview/ListViewFooter";
 import { ListViewHeader } from "../shared/listview/ListViewHeader";
 import { ListViewDatatHeader } from "../shared/listview/ListViewDataHeader";
-import { type IListProductDto } from "~/domain/dtos/product.dto";
-import { type IProductEntity } from "~/domain/entity/product.entity";
-import { Product } from "~/domain/model/product.model";
+import { type IListCategoryDto } from "~/domain/dtos/category.dto";
+import { type ICategoryEntity } from "~/domain/entity/category.entity";
+import { Category } from "~/domain/model/category.model";
 
 
-export interface ListProductProps {
-    productList: IListProductDto,
+export interface ListCategoryProps {
+    categoryListResponse: IListCategoryDto,
     insertAction$: PropFunction<() => void>,
-    editAction$: PropFunction<(data: IProductEntity) => void>,
+    editAction$: PropFunction<(data: ICategoryEntity) => void>,
     deleteAction$: PropFunction<(id: number) => void>,
     paginationAction$: PropFunction<(typeAction: string) => void>,
 }
 
-export const ListProduct = component$<ListProductProps>(({
-    productList,
+export const ListCategory = component$<ListCategoryProps>(({
+    categoryListResponse,
     insertAction$,
     editAction$,
     deleteAction$,
@@ -26,26 +26,23 @@ export const ListProduct = component$<ListProductProps>(({
     return (
         <div class="flex flex-col space-y-3 w-full">
             <ListViewHeader
-                title={Product.modelNamePlural}
+                title={Category.modelNamePlural}
                 insertAction$={insertAction$}
             />
 
             <ListViewDatatHeader>
                 <div class='w-1/12'>Id</div>
                 <div class='w-3/12'>Name</div>
-                <div class='w-3/12'>Descripción</div>
-                <div class='w-2/12'>Precio</div>
-                <div class='w-1/12'>Moneda</div>
                 <div class='w-1/12'>.</div>
                 <div class='w-1/12'>.</div>
             </ListViewDatatHeader>
 
             {/* ListViewData */}
             <div class="flex flex-col space-y-2"> {
-                productList.data?.map(product => (
-                    <ItemProduct
-                        key={product.id}
-                        product={product}
+                categoryListResponse.data.map(category => (
+                    <ItemCategory
+                        key={category.id}
+                        category={category}
                         editAction$={editAction$}
                         deleteAction$={deleteAction$}
                     />
@@ -54,7 +51,7 @@ export const ListProduct = component$<ListProductProps>(({
 
             <ListViewFooter
                 paginationAction$={(typeAction: string) => paginationAction$(typeAction)}
-                pagination={{ offset: productList.pagination?.offset?? 0, count: productList.pagination?.count?? 0 }}
+                pagination={{ offset: categoryListResponse.pagination?.offset?? 0, count: categoryListResponse.pagination?.count?? 0 }}
             />
         </div>
     )

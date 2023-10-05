@@ -1,8 +1,9 @@
-import { component$, useSignal, $ } from '@builder.io/qwik';
-import { Form, routeAction$, routeLoader$, server$, useLocation, useNavigate, z, zod$ } from '@builder.io/qwik-city';
+import { component$, useSignal } from '@builder.io/qwik';
+import { routeAction$, routeLoader$, z, zod$ } from '@builder.io/qwik-city';
 import { supabaseClient } from '~/utils/supabase';
 import { type ISupabaseResponse } from '~/infrastructure/data/supabase/supabase';
-import { ListProduct } from '~/components/products/ListProduct';
+import { AppConfig } from '~/domain/app.config';
+// import { ListProduct } from '~/components/products/ListProduct';
 
 export interface IPagination {
   count: number,
@@ -26,12 +27,12 @@ export const useGetProducts = routeLoader$<IDataProduct>(async (requestEvent) =>
   const supabase = supabaseClient(requestEvent);
   let iniRow = Number(requestEvent.query.get('iniRow') || '0')
   if (isNaN(iniRow) || iniRow < 0) iniRow = 0;
-  const offSet = iniRow + PAGINATION.limit - 1;
+  // const offSet = iniRow + PAGINATION.limit - 1;
   const data = await supabase
     .from('products')
     .select('*')
     .order('name') as ISupabaseResponse
-  console.log('routerLoad:', iniRow, offSet, 'data.count')
+  // console.log('routerLoad:', iniRow, offSet, 'data.count')
   return {
     data: data.data ?? [],
     error: data.error?.message ?? null,
@@ -79,7 +80,7 @@ export const useActionProduct = routeAction$(async (product, requestEvent) => {
     currency: rsptaValidate.data.currency,
   }
 
-  if (product.typeAction == ACTION.insert) {
+  if (product.typeAction == AppConfig.ACTION.insert) {
     // insert db
     const supabase = supabaseClient(requestEvent);
     const data = await supabase
@@ -125,62 +126,62 @@ export const useActionProduct = routeAction$(async (product, requestEvent) => {
 
 );
 
-const deleteProduct = server$(async function (id: number) {
-  const supabase = supabaseClient(this);
+// const deleteProduct = server$(async function (id: number) {
+//   const supabase = supabaseClient(this);
 
-  const data = await supabase
-    .from('products')
-    .delete()
-    .eq('id', id)
-  console.log('delete:', data);
+//   const data = await supabase
+//     .from('products')
+//     .delete()
+//     .eq('id', id)
+//   console.log('delete:', data);
 
-  return (data.status == 204) ? true : false;
-})
+//   return (data.status == 204) ? true : false;
+// })
 
 
 export default component$(() => {
   const productsSignal = useGetProducts();
-  const actionSubmit = useActionProduct();
-  const location = useLocation();
-  const typeAction = useSignal(ACTION.insert);
+  // const actionSubmit = useActionProduct();
+  // const location = useLocation();
+  const typeAction = useSignal(AppConfig.ACTION.insert);
   // fields
-  const idSignal = useSignal('');
-  const nameSignal = useSignal('');
-  const currencySignal = useSignal('PEN');
-  const priceSignal = useSignal('');
-  const nav = useNavigate()
-  const deleteSignal = useSignal(false)
+  // const idSignal = useSignal('');
+  // const nameSignal = useSignal('');
+  // const currencySignal = useSignal('PEN');
+  // const priceSignal = useSignal('');
+  // // const nav = useNavigate()
+  // const deleteSignal = useSignal(false)
 
-  const actionEdit = $((product: IProduct) => {
-    idSignal.value = product.id.toString();
-    nameSignal.value = product.name;
-    currencySignal.value = product.currency;
-    priceSignal.value = product.price.toString();
-    typeAction.value = ACTION.update;
-  })
+  // const actionEdit = $((product: IProduct) => {
+  //   idSignal.value = product.id.toString();
+  //   nameSignal.value = product.name;
+  //   currencySignal.value = product.currency;
+  //   priceSignal.value = product.price.toString();
+  //   typeAction.value = AppConfig.ACTION.update;
+  // })
 
-  const actionDelete = $(async (id: number) => {
+  // const actionDelete = $(async (id: number) => {
 
-    const deleteOk = await deleteProduct(id);
-    alert(deleteOk ? 'Producto eliminado satisfactoriamente.' : 'Error al eliminar producto.')
-    if (deleteOk) {
-      console.log('pre-nav')
-      await nav();
-      deleteSignal.value = true
-      console.log('post-nav')
-    }
-  })
+  //   const deleteOk = await deleteProduct(id);
+  //   alert(deleteOk ? 'Producto eliminado satisfactoriamente.' : 'Error al eliminar producto.')
+  //   if (deleteOk) {
+  //     console.log('pre-nav')
+  //     await nav();
+  //     deleteSignal.value = true
+  //     console.log('post-nav')
+  //   }
+  // })
 
-  const clearInputs = $(() => {
-    if (!actionSubmit.value?.success)
-      return;
-    return;
+  // const clearInputs = $(() => {
+  //   if (!actionSubmit.value?.success)
+  //     return;
+  //   return;
 
-    idSignal.value = '';
-    nameSignal.value = '';
-    currencySignal.value = 'PEN';
-    priceSignal.value = '';   
-  });
+  //   idSignal.value = '';
+  //   nameSignal.value = '';
+  //   currencySignal.value = 'PEN';
+  //   priceSignal.value = '';   
+  // });
 
   // useTask$(({track})=>{
   //   track(() => actionSubmit.value?.success);
@@ -200,7 +201,7 @@ export default component$(() => {
   return (
     <div class='flex flex-row space-x-3 w-full px-4'>
       <div class='w-[70%] border border-gray-500'>
-        {
+        {/* {
           location.isNavigating
             ? <div class=''>Loading...</div>
             : <ListProduct
@@ -209,12 +210,12 @@ export default component$(() => {
               actionDelete$={(id: number) => actionDelete(id)}
               pagination={productsSignal.value.pagination}
             />
-        }
+        } */}
       </div>
 
       <div class='w-[30%] border border-gray-500 '>
-        <h1 class='text-center'>{(typeAction.value == ACTION.insert) ? 'Nuevo Producto' : 'Modificar Producto'}</h1>
-        <Form
+        <h1 class='text-center'>{(typeAction.value == AppConfig.ACTION.insert) ? 'Nuevo Producto' : 'Modificar Producto'}</h1>
+        {/* <Form
           action={actionSubmit}
           class='flex flex-col space-y-2'
           onSubmitCompleted$={() => clearInputs()}
@@ -238,14 +239,14 @@ export default component$(() => {
           </div>
 
           <button type="submit" class='button'>{
-            (typeAction.value == ACTION.insert)
+            (typeAction.value == AppConfig.ACTION.insert)
               ? 'Agregar Producto'
               : 'Modificar Producto'
           }</button>
         </Form>
 
         {actionSubmit.value?.success
-          ? <p>{(typeAction.value == ACTION.insert)
+          ? <p>{(typeAction.value == AppConfig.ACTION.insert)
             ? 'Product agregado satisfactoriamente.'
             : 'Producto modificado satisfactoriamenete.'}
           </p>
@@ -268,7 +269,7 @@ export default component$(() => {
           && actionSubmit.value.fieldErrors?.price
           && <p>Price: {actionSubmit.value.fieldErrors.price}</p>
 
-        }
+        } */}
 
       </div>
 

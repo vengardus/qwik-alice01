@@ -5,7 +5,6 @@ import {
   routeLoader$,
   useLocation,
   zod$, z, 
-  type RequestHandler
 } from "@builder.io/qwik-city";
 import { supabaseClient } from "~/utils/supabase";
 

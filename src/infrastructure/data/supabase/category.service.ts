@@ -1,17 +1,17 @@
 import { type RequestEventBase } from "@builder.io/qwik-city"
 import { type ISupabaseResponse, Supabase } from "./supabase"
-import type { IRegisterProductDto } from "~/domain/dtos/product.dto"
+import type { IRegisterCategoryDto } from "~/domain/dtos/category.dto"
 import type { IDataResponse } from "~/domain/dtos/app.dto"
 
 
-export class ProductService {
+export class CategoryService  {
 
   constructor(private readonly requestEvent: RequestEventBase) { }
-
+  
   async getAll(): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-      .from('products')
+      .from('categories')
       .select('*')
       .order('name') as ISupabaseResponse
 
@@ -27,28 +27,26 @@ export class ProductService {
     : Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-      .from('products')
+      .from('categories')
       .select('*', { count: 'exact' })
       .range(offset, offset + limit - 1)
       .order('name', { ascending: true }) as ISupabaseResponse
 
-    console.log('service', data, offset, offset + limit - 1)
     return {
       data: data.data,
       pagination: {
-        // OBS: supabase devuelve data con [] cuando offset == count (debería ser null como cuando es > count)
-        offset: (data.data && data.data.length) ? offset : 0,
-        count: (data.data && data.data.length && data.count) ? data.count : 0
+        offset,
+        count: data.count
       },
       success: data.error ? false : true,
       message: data.error?.message ?? null
     }
   }
 
-  async insert(object: IRegisterProductDto): Promise<IDataResponse> {
+  async insert(object: IRegisterCategoryDto): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-      .from('products')
+      .from('categories')
       .insert([object])
       .select() as ISupabaseResponse
 
@@ -60,16 +58,13 @@ export class ProductService {
     }
   }
 
-  async update(id: number, object: IRegisterProductDto): Promise<IDataResponse> {
+  async update(id: number, object: IRegisterCategoryDto): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-      .from('products')
+      .from('categories')
       .update(
         {
           name: object.name,
-          description: object.description,
-          price: object.price,
-          currency: object.currency,
         }
       )
       .eq('id', id)
@@ -87,7 +82,7 @@ export class ProductService {
   async delete(id: number): Promise<IDataResponse> {
     const supabase = Supabase.connect(this.requestEvent)
     const data = await supabase
-      .from('products')
+      .from('categories')
       .delete()
       .eq('id', id) as ISupabaseResponse
 

@@ -1,52 +1,38 @@
 import { component$, type Signal, $, useSignal } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import { AppConfig } from "~/domain/app.config";
+// import type { IListCategoryDto } from "~/domain/dtos/category.dto";
 import { CustomMessages } from "~/domain/messages/customMessages";
-import { useRegisterProduct } from "~/routes/(alice)/product/(list)";
+import { useRegisterCategory } from "~/routes/(alice)/category/(list)";
 
 
-export interface FormProductProps {
+export interface FormCategoryProps {
     typeActionSignal: Signal<string>
     // fields form
     idSignal: Signal<string>
     nameSignal: Signal<string>
-    descriptionSignal: Signal<string>
-    currencySignal: Signal<string>
-    priceSignal: Signal<string>
 }
 
-export const FormProduct = component$<FormProductProps>(({
+export const FormCategory = component$<FormCategoryProps>(({
     typeActionSignal,
     // fields form
     idSignal,
     nameSignal,
-    descriptionSignal,
-    currencySignal,
-    priceSignal,
 }) => {
-    const submitAction = useRegisterProduct();
+    const submitAction = useRegisterCategory();
     const msgFormSignal = useSignal('')
     //const nav = useNavigate()
 
     const clearInputs = $(() => {
         idSignal.value = '';
-        descriptionSignal.value = '';
         nameSignal.value = '';
-        currencySignal.value = 'PEN';
-        priceSignal.value = '';
     })
 
-    const postRegisterProduct = $(async () => {
+    const postRegisterCategory = $(async () => {
         msgFormSignal.value = ''
         if (submitAction.value?.failed) {
             if (submitAction.value.fieldErrors?.name)
                 msgFormSignal.value = `Name: ${submitAction.value.fieldErrors.name}`
-            else if (submitAction.value.fieldErrors?.description)
-                msgFormSignal.value = `Description: ${submitAction.value.fieldErrors.description}`
-            else if (submitAction.value.fieldErrors?.currency)
-                msgFormSignal.value = `Currency: ${submitAction.value.fieldErrors.currency}`
-            else if (submitAction.value.fieldErrors?.price)
-                msgFormSignal.value = `Price: ${submitAction.value.fieldErrors.price}`
             return
         }
 
@@ -73,7 +59,7 @@ export const FormProduct = component$<FormProductProps>(({
             <Form
                 action={submitAction}
                 class='flex flex-col space-y-2 w-full'
-                onSubmitCompleted$={() => postRegisterProduct()}
+                onSubmitCompleted$={() => postRegisterCategory()}
             >
                 <input name="typeAction" bind: value={typeActionSignal} hidden />
 
@@ -84,18 +70,6 @@ export const FormProduct = component$<FormProductProps>(({
                 <div class='flex'>
                     <label for="name" class='w-3/12'>Name:</label>
                     <input name="name" bind: value={nameSignal} />
-                </div>
-                <div class='flex'>
-                    <label for="description" class='w-3/12'>Descripción:</label>
-                    <input name="description" bind: value={descriptionSignal} />
-                </div>
-                <div class='flex'>
-                    <label for="currency" class='w-3/12'>Moneda:</label>
-                    <input name="currency" bind: value={currencySignal} />
-                </div>
-                <div class='flex'>
-                    <label for="price" class='w-3/12'>Precio:</label>
-                    <input name="price" bind: value={priceSignal} />
                 </div>
 
                 <button type="submit" class='button'>{

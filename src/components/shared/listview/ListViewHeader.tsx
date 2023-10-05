@@ -2,11 +2,11 @@ import { type PropFunction, component$ } from "@builder.io/qwik"
 
 export interface ListViewHeaderProps {
   title: string
-  showModalCallback$: PropFunction<() => void>
+  insertAction$: PropFunction<() => void>,
 }
 export const ListViewHeader = component$<ListViewHeaderProps>(({
   title,
-  showModalCallback$
+  insertAction$
 }) => {
   return (
     <div class="flex w-full items-center">
@@ -15,7 +15,7 @@ export const ListViewHeader = component$<ListViewHeaderProps>(({
         <button
           preventdefault: click
           onClick$={() => {
-            showModalCallback$()
+            insertAction$()
           }}>Agregar(+)</button>
       </div>
     </div>

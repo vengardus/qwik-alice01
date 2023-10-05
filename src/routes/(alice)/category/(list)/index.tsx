@@ -1,41 +1,40 @@
 import { component$, $, useSignal } from "@builder.io/qwik";
 import { routeAction$, routeLoader$, useLocation, useNavigate, z, zod$ } from "@builder.io/qwik-city";
-import { ProductController } from "~/controllers/product.controller";
-import type { IListProductDto } from "~/domain/dtos/product.dto";
+import { CategoryController } from "~/controllers/category.controller";
+import type { IListCategoryDto } from "~/domain/dtos/category.dto";
 import { CustomMessages } from "~/domain/messages/customMessages";
 import { AppConfig } from "~/domain/app.config";
-import type { IProductEntity } from "~/domain/entity/product.entity";
+import type { ICategoryEntity } from "~/domain/entity/category.entity";
 import { Modal } from '~/components/shared/modal/Modal';
-import { ListProduct } from "~/components/product/ListProduct";
-import { FormProduct } from "~/components/product/FormProduct";
+import { ListCategory } from "~/components/category/ListCategory";
+import { FormCategory } from "~/components/category/FormCategory";
 import { Pagination } from "~/domain/model/pagination.model";
 
 
-export const useGetProductList = routeLoader$<IListProductDto>(async (requestEvent) => {
+export const useGetCategoryList = routeLoader$<IListCategoryDto>(async (requestEvent) => {
     let offset = Number(requestEvent.query.get('offset') || '0')
     if (isNaN(offset)) offset = 0
+    const oCategoryController = new CategoryController(requestEvent)
+    const data = await oCategoryController.getAllPagination({ offset, limit: AppConfig.PAGINATION.limit })
 
-    const oProductController = new ProductController(requestEvent)
-    const data = await oProductController.getAllPagination({ offset, limit: AppConfig.PAGINATION.limit })
-    console.log('loader', data)
     return data
 })
 
-export const useDeleteProduct = routeAction$(async (object, requestEvent) => {
-    const oProductController = new ProductController(requestEvent)
-    const data = await oProductController.delete(Number(object.id))
+export const useDeleteCategory = routeAction$(async (object, requestEvent) => {
+    const oCategoryController = new CategoryController(requestEvent)
+    const data = await oCategoryController.delete(Number(object.id))
     return data
 })
 
-export const useRegisterProduct = routeAction$(async (product, requestEvent) => {
-    const oProductController = new ProductController(requestEvent)
+export const useRegisterCategory = routeAction$(async (category, requestEvent) => {
+    const oCategoryController = new CategoryController(requestEvent)
     let data
-    if (product.typeAction == AppConfig.ACTION.insert)
-        data = await oProductController.insert(product)
+    if (category.typeAction == AppConfig.ACTION.insert)
+        data = await oCategoryController.insert(category)
     else {
-        const id = parseInt(product.id)
-        const oProductController = new ProductController(requestEvent)
-        data = await oProductController.update(id, product)
+        const id = parseInt(category.id)
+        const oCategoryController = new CategoryController(requestEvent)
+        data = await oCategoryController.update(id, category)
     }
     if (!data.success)
         return {
@@ -49,24 +48,21 @@ export const useRegisterProduct = routeAction$(async (product, requestEvent) => 
     }
 },
     zod$({
-        id: z.string(),
         typeAction: z.string(),
+        id: z.string(),
         name: z.string().min(3, 'Mínimo 3 caracter'),
-        description: z.string().min(3, 'Mínimo 3 caracter'),
-        currency: z.string().min(3, 'Debe tener 3 caracteres').max(3, 'Debe tener 3 caracteres'),
-        price: z.string().min(1, 'Debe ingresar precio'),
     })
 
 );
 
-export const usePaginationProduct = routeAction$(() => {
+export const usePaginationCategory = routeAction$( () => {
 })
 
 
 export default component$(() => {
-    const productListResponse = useGetProductList()
-    const deleteActionRoute = useDeleteProduct()
-    const paginationRouter = usePaginationProduct()
+    const categoryListResponse = useGetCategoryList()
+    const deleteActionRoute = useDeleteCategory()
+    const paginationRouter = usePaginationCategory()
     const location = useLocation()
     const nav = useNavigate()
     const msgLoadingSignal = useSignal('')
@@ -78,9 +74,6 @@ export default component$(() => {
     // fields
     const idSignal = useSignal('');
     const nameSignal = useSignal('');
-    const descriptionSignal = useSignal('');
-    const currencySignal = useSignal('PEN');
-    const priceSignal = useSignal('');
 
     const showModalCallback = $(() => {
         showModalSignal.value = true
@@ -95,12 +88,9 @@ export default component$(() => {
         showModalCallback()
     })
 
-    const editAction = $((product: IProductEntity) => {
-        idSignal.value = product.id.toString();
-        nameSignal.value = product.name;
-        descriptionSignal.value = product.description;
-        currencySignal.value = product.currency;
-        priceSignal.value = product.price.toString();
+    const editAction = $((category: ICategoryEntity) => {
+        idSignal.value = category.id.toString();
+        nameSignal.value = category.name;
 
         typeActionSignal.value = AppConfig.ACTION.update;
         showModalCallback()
@@ -117,8 +107,8 @@ export default component$(() => {
         const url = location.url.pathname
         const offset = Pagination.calculateNewOffset({
             typeAction: typeAction,
-            offset: productListResponse.value.pagination?.offset ?? 0,
-            count: productListResponse.value.pagination?.count ?? 0,
+            offset:categoryListResponse.value.pagination?.offset ?? 0,
+            count: categoryListResponse.value.pagination?.count ?? 0,
             limit: AppConfig.PAGINATION.limit
         })
         await nav(`${url}?offset=${offset}`)
@@ -127,10 +117,10 @@ export default component$(() => {
 
     return (
         <>
-            <ListProduct
-                productList={productListResponse.value}
+            <ListCategory
+                categoryListResponse={categoryListResponse.value}
                 insertAction$={() => insertAction()}
-                editAction$={(product: IProductEntity) => editAction(product)}
+                editAction$={(category: ICategoryEntity) => editAction(category)}
                 deleteAction$={(id: number) => deleteAction(id)}
                 paginationAction$={(typeAction: string) => paginationAction(typeAction)}
             />
@@ -148,14 +138,11 @@ export default component$(() => {
             >
                 <span q: slot='title' class='text-blue-700'></span>
                 <div q: slot='content' class='flex flex-col justify-center items-center'>
-                    <FormProduct
+                    <FormCategory
                         typeActionSignal={typeActionSignal}
                         //fields
                         idSignal={idSignal}
                         nameSignal={nameSignal}
-                        descriptionSignal={descriptionSignal}
-                        currencySignal={currencySignal}
-                        priceSignal={priceSignal}
                     />
                 </div>
             </Modal>

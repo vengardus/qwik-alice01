@@ -3,7 +3,7 @@ import { type IDataResponse } from "./app.dto"
 
 
 export interface IListProductDto extends IDataResponse {
-  data: IProductEntity[]
+  data: IProductEntity[] | null
 }
 
 export interface IRegisterProductDto {

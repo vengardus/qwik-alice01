@@ -3,20 +3,23 @@ import type { IRegisterProductDto } from "../dtos/product.dto"
 
 
 export class Product {
+    static modelName = 'Producto'
+    static modelNamePlural = 'Productos'
+
     constructor(
-        private aTOProduct: IProductEntity[] = []
+        private aTO: IProductEntity[] = []
     ) { }
 
     count() {
-        return this.aTOProduct.length
+        return this.aTO.length
     }
 
-    getATOPoduct() {
-        return this.aTOProduct
+    getATO() {
+        return this.aTO
     }
 
-    setATOProduct(data: IProductEntity[]) {
-        this.aTOProduct = data
+    setATO(data: IProductEntity[]) {
+        this.aTO = data
     }
 
     static preValidateObject(object: { [key: string]: any })

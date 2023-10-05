@@ -9,7 +9,7 @@ export const useLecturaAction = routeAction$((props) => {
 
 export default component$(() => {
   const lecturas = useContext(lecturaMedidorContext)
-  const lecturaAction = useLecturaAction();
+  // const lecturaAction = useLecturaAction();
   
   const submitLecturaAction = $(() => {
     lecturas.push({id:1, lectura:12367, fecha:'14/12/2023'})
