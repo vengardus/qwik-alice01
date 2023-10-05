@@ -1,4 +1,4 @@
-import { component$, type Signal, $, useSignal } from "@builder.io/qwik";
+import { component$, type Signal, $, useSignal, type PropFunction } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import { AppConfig } from "~/domain/app.config";
 import { CustomMessages } from "~/domain/messages/customMessages";
@@ -6,7 +6,8 @@ import { useRegisterProduct } from "~/routes/(alice)/product/(list)";
 
 
 export interface FormProductProps {
-    typeActionSignal: Signal<string>
+    typeAction: string
+    initInputs$: PropFunction<() => void>
     // fields form
     idSignal: Signal<string>
     nameSignal: Signal<string>
@@ -16,7 +17,8 @@ export interface FormProductProps {
 }
 
 export const FormProduct = component$<FormProductProps>(({
-    typeActionSignal,
+    typeAction,
+    initInputs$,
     // fields form
     idSignal,
     nameSignal,
@@ -26,15 +28,6 @@ export const FormProduct = component$<FormProductProps>(({
 }) => {
     const submitAction = useRegisterProduct();
     const msgFormSignal = useSignal('')
-    //const nav = useNavigate()
-
-    const clearInputs = $(() => {
-        idSignal.value = '';
-        descriptionSignal.value = '';
-        nameSignal.value = '';
-        currencySignal.value = 'PEN';
-        priceSignal.value = '';
-    })
 
     const postRegisterProduct = $(async () => {
         msgFormSignal.value = ''
@@ -51,22 +44,21 @@ export const FormProduct = component$<FormProductProps>(({
         }
 
         if (!submitAction.value?.success) {
-            msgFormSignal.value = (typeActionSignal.value == AppConfig.ACTION.insert)
+            msgFormSignal.value = (typeAction == AppConfig.ACTION.insert)
                 ? `${CustomMessages.msgInsertError()}: ${submitAction.value?.message}`
                 : `${CustomMessages.msgUpdateError()}: ${submitAction.value?.message}`
             return;
         }
-        clearInputs()
-        msgFormSignal.value = (typeActionSignal.value == AppConfig.ACTION.insert)
+        initInputs$()
+        msgFormSignal.value = (typeAction == AppConfig.ACTION.insert)
             ? CustomMessages.msgInsertOk()
             : CustomMessages.msgUpdateOk()
-        
-    });
 
+    });
 
     return (
         <div class="w-full">
-            <h1 class='text-center'>{(typeActionSignal.value == AppConfig.ACTION.insert)
+            <h1 class='text-center'>{(typeAction == AppConfig.ACTION.insert)
                 ? 'Nuevo Registro'
                 : 'Modificar Registro'
             }</h1>
@@ -75,7 +67,7 @@ export const FormProduct = component$<FormProductProps>(({
                 class='flex flex-col space-y-2 w-full'
                 onSubmitCompleted$={() => postRegisterProduct()}
             >
-                <input name="typeAction" bind: value={typeActionSignal} hidden />
+                <input name="typeAction" value={typeAction} hidden />
 
                 <div class='flex w-full'>
                     <label for="id" class='w-3/12'>Id:</label>
@@ -99,7 +91,7 @@ export const FormProduct = component$<FormProductProps>(({
                 </div>
 
                 <button type="submit" class='button'>{
-                    (typeActionSignal.value == AppConfig.ACTION.insert)
+                    (typeAction == AppConfig.ACTION.insert)
                         ? 'Agregar'
                         : 'Actualizar'
                 }</button>
@@ -108,13 +100,13 @@ export const FormProduct = component$<FormProductProps>(({
             </Form>
 
             <>
-            { 
-                submitAction.isRunning
-                    ? (typeActionSignal.value == AppConfig.ACTION.insert)
-                        ? CustomMessages.msgInsert() 
-                        : CustomMessages.msgUpdate()
-                    : '' 
-            } 
+                {
+                    submitAction.isRunning
+                        ? (typeAction == AppConfig.ACTION.insert)
+                            ? CustomMessages.msgInsert()
+                            : CustomMessages.msgUpdate()
+                        : ''
+                }
             </>
 
         </div>

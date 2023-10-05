@@ -32,7 +32,6 @@ export class ProductService {
       .range(offset, offset + limit - 1)
       .order('name', { ascending: true }) as ISupabaseResponse
 
-    console.log('service', data, offset, offset + limit - 1)
     return {
       data: data.data,
       pagination: {
@@ -73,8 +72,6 @@ export class ProductService {
         }
       )
       .eq('id', id)
-
-    console.log('service-update', data)
 
     return {
       data: (data.data),

@@ -20,7 +20,6 @@ export class ProductController {
     : Promise<IListProductDto> {
     const oProductService = new ProductService(this.requestEvent)
     const data = await oProductService.getAllPagination({ offset, limit })
-    console.log('controller', data)
     return ProductMapper.ListProductDtoFromDataResponse(data)
   }
 

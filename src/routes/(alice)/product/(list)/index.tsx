@@ -1,4 +1,4 @@
-import { component$, $, useSignal } from "@builder.io/qwik";
+import { component$, $, useSignal, useTask$, useStore } from "@builder.io/qwik";
 import { routeAction$, routeLoader$, useLocation, useNavigate, z, zod$ } from "@builder.io/qwik-city";
 import { ProductController } from "~/controllers/product.controller";
 import type { IListProductDto } from "~/domain/dtos/product.dto";
@@ -14,10 +14,9 @@ import { Pagination } from "~/domain/model/pagination.model";
 export const useGetProductList = routeLoader$<IListProductDto>(async (requestEvent) => {
     let offset = Number(requestEvent.query.get('offset') || '0')
     if (isNaN(offset)) offset = 0
-
     const oProductController = new ProductController(requestEvent)
     const data = await oProductController.getAllPagination({ offset, limit: AppConfig.PAGINATION.limit })
-    console.log('loader', data)
+
     return data
 })
 
@@ -69,48 +68,64 @@ export default component$(() => {
     const paginationRouter = usePaginationProduct()
     const location = useLocation()
     const nav = useNavigate()
-    const msgLoadingSignal = useSignal('')
-
-    // funcionalidad Form
-    const typeActionSignal = useSignal(AppConfig.ACTION.insert);
-    const showModalSignal = useSignal(false)
+    interface IComponentStore {
+        msgLoading: string
+        typeAction: string
+        showModal: boolean
+    }
+    const componentStore = useStore<IComponentStore>({
+        msgLoading: '',
+        typeAction: AppConfig.ACTION.insert,
+        showModal: false
+    })
 
     // fields
     const idSignal = useSignal('');
     const nameSignal = useSignal('');
     const descriptionSignal = useSignal('');
-    const currencySignal = useSignal('PEN');
+    const currencySignal = useSignal('');
     const priceSignal = useSignal('');
 
+
     const showModalCallback = $(() => {
-        showModalSignal.value = true
+        componentStore.showModal = true
     });
 
     const closeModalCallback = $(() => {
-        showModalSignal.value = false
+        componentStore.showModal = false
     });
 
+    const initInputs = $(() => {
+        idSignal.value = '';
+        descriptionSignal.value = '';
+        nameSignal.value = '';
+        currencySignal.value = 'USD';
+        priceSignal.value = '';
+    })
+
     const insertAction = $(() => {
-        typeActionSignal.value = AppConfig.ACTION.insert
+        componentStore.typeAction = AppConfig.ACTION.insert
+        initInputs()
         showModalCallback()
     })
 
     const editAction = $((product: IProductEntity) => {
+        // set fields form
         idSignal.value = product.id.toString();
         nameSignal.value = product.name;
         descriptionSignal.value = product.description;
         currencySignal.value = product.currency;
         priceSignal.value = product.price.toString();
 
-        typeActionSignal.value = AppConfig.ACTION.update;
+        componentStore.typeAction = AppConfig.ACTION.update;
         showModalCallback()
     })
 
     const deleteAction = $(async (id: number) => {
-        msgLoadingSignal.value = CustomMessages.msgDelete()
+        componentStore.msgLoading = CustomMessages.msgDelete()
         const data = await deleteActionRoute.submit({ id: id })
-        if (data.value.success) msgLoadingSignal.value = CustomMessages.msgDeleteOk()
-        else msgLoadingSignal.value = CustomMessages.msgDeleteError()
+        if (data.value.success) componentStore.msgLoading = CustomMessages.msgDeleteOk()
+        else componentStore.msgLoading = CustomMessages.msgDeleteError()
     })
 
     const paginationAction = $(async (typeAction: string) => {
@@ -124,6 +139,11 @@ export default component$(() => {
         await nav(`${url}?offset=${offset}`)
         paginationRouter.submit()
     })
+
+    useTask$(() => {
+        initInputs()
+    })
+
 
     return (
         <>
@@ -139,17 +159,18 @@ export default component$(() => {
                 location.isNavigating && <div>Cargando....</div>
             }
 
-            <div>{msgLoadingSignal.value}</div>
+            <div>{componentStore.msgLoading}</div>
 
             <Modal
-                showModal={showModalSignal.value}
+                showModal={componentStore.showModal}
                 closeModal={closeModalCallback}
                 size='w-10/12'
             >
                 <span q: slot='title' class='text-blue-700'></span>
                 <div q: slot='content' class='flex flex-col justify-center items-center'>
                     <FormProduct
-                        typeActionSignal={typeActionSignal}
+                        typeAction={componentStore.typeAction}
+                        initInputs$={initInputs}
                         //fields
                         idSignal={idSignal}
                         nameSignal={nameSignal}
