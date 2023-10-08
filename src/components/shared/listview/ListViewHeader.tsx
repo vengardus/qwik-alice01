@@ -10,7 +10,7 @@ export const ListViewHeader = component$<ListViewHeaderProps>(({
 }) => {
   return (
     <div class="flex w-full items-center">
-      <h1 class="w-10/12 text-center">{title}</h1>
+      <h2 class="w-10/12 text-center">{title}</h2>
       <div class="w-2-12 text-right">
         <button
           preventdefault: click

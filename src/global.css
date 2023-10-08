@@ -2,18 +2,13 @@
  * Tailwind CSS imports
  * View the full documentation at https://tailwindcss.com
  */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles. No matter which components are in the page or matching route,
- * the styles in here will be applied to the Document, without any sort of CSS scoping.
- *
- */
 
+/* variables */
 :root {
   --qwik-dark-blue: #006ce9;
   --qwik-light-blue: #18b6f6;
@@ -24,6 +19,7 @@
   --qwik-dark-text: #ffffff;
 }
 
+/* reset */
 html {
   line-height: 1;
   -webkit-text-size-adjust: 100%;
@@ -33,56 +29,29 @@ html {
   font-family:
     ui-sans-serif,
     system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
     Arial,
-    "Noto Sans",
     sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
 }
 
-body {
+* {
   padding: 0;
   margin: 0;
   line-height: inherit;
-}
-
-/**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles. No matter which components are in the page or matching route,
- * the styles in here will be applied to the Document, without any sort of CSS scoping.
- *
- */
-html {
-  -webkit-text-size-adjust: 100%;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
+  box-sizing: border-box;
 }
 
 body {
-  padding: 0;
-  line-height: inherit;
+  font-family: "Montserrat", sans-serif;
+}
+
+
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+
+.btn_primary {
+  @apply bg-blue-500 text-white;
+}
+.btn_primary:hover {
+  @apply bg-blue-700 text-white;
 }

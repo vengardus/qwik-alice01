@@ -6,8 +6,14 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontFamily:{
+      'sans':['ui-sans-serif', 'system-ui'],
+      'montserrat':['Montserrat'],
+    }
   },
   plugins: [
     require('flowbite/plugin') // add this line
   ],
+  darkMode: 'media',
+
 };

@@ -1,14 +1,10 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { 
-  type DocumentHead,
-  Link 
-} from '@builder.io/qwik-city';
+import { type DocumentHead} from '@builder.io/qwik-city';
 
 
 export default component$(() => {
   return (
-    <div class='bg-gray-900 border text-gray-100 w-full p-3'>
-      <Link href='/tuto' class='text-center'><h1>Tutorial</h1></Link>
+    <div class='bg-gray-900 text-gray-100'>
       <Slot />
     </div>
   );

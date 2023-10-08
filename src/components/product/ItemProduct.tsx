@@ -19,8 +19,8 @@ export const ItemProduct = component$<ItemProductProps>(({
       <div class='w-3/12'>{product.description}</div>
       <div class='w-2/12'>{product.price}</div>
       <div class='w-1/12'>{product.currency}</div>
-      <div class='w-1/12'><button onClick$={() => editAction$(product)}>Editar</button></div>
-      <div class='w-1/12'><button onClick$={() => deleteAction$(product.id)}>Eliminar</button></div>
+      <div class='w-1/12'><button onClick$={() => editAction$(product)} class="btn">Editar</button></div>
+      <div class='w-1/12'><button onClick$={() => deleteAction$(product.id)} class="btn">Eliminar</button></div>
     </div>
   );
 });
