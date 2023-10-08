@@ -37,7 +37,7 @@ export class Product {
         const { name, description, price, currency } = object
         const messageError = this.preValidateObject(object)
         if (messageError) return [messageError, undefined]
-        
+
         const priceToNumber = Number(price);
         if (Number.isNaN(priceToNumber) || priceToNumber <= 0) return ['Error en precio']
 
@@ -47,6 +47,22 @@ export class Product {
             price: Number(price),
             currency: String(currency).toUpperCase()
         }]
+    }
+
+    static initInputs(): {
+        id: string,
+        description: string,
+        name: string,
+        currency: string,
+        price: string
+    } {
+        return {
+            id: '',
+            description: '',
+            name: '',
+            currency: 'USD',
+            price: '',
+        }
     }
 
 

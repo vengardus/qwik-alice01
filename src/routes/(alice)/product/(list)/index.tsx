@@ -9,6 +9,7 @@ import { Modal } from '~/components/shared/modal/Modal';
 import { ListProduct } from "~/components/product/ListProduct";
 import { FormProduct } from "~/components/product/FormProduct";
 import { Pagination } from "~/domain/model/pagination.model";
+import { Product } from "~/domain/model/product.model";
 
 
 export const useGetProductList = routeLoader$<IListProductDto>(async (requestEvent) => {
@@ -65,7 +66,7 @@ export const usePaginationProduct = routeAction$(() => {
 export default component$(() => {
     const productListResponse = useGetProductList()
     const deleteActionRoute = useDeleteProduct()
-    const paginationRouter = usePaginationProduct()
+    const paginationActionRoute = usePaginationProduct()
     const location = useLocation()
     const nav = useNavigate()
     interface IComponentStore {
@@ -96,11 +97,12 @@ export default component$(() => {
     });
 
     const initInputs = $(() => {
-        idSignal.value = '';
-        descriptionSignal.value = '';
-        nameSignal.value = '';
-        currencySignal.value = 'USD';
-        priceSignal.value = '';
+        const data = Product.initInputs()
+        idSignal.value = data.id
+        descriptionSignal.value = data.description
+        nameSignal.value = data.name
+        currencySignal.value = data.currency
+        priceSignal.value = data.price;
     })
 
     const insertAction = $(() => {
@@ -129,15 +131,15 @@ export default component$(() => {
     })
 
     const paginationAction = $(async (typeAction: string) => {
-        const url = location.url.pathname
         const offset = Pagination.calculateNewOffset({
             typeAction: typeAction,
             offset: productListResponse.value.pagination?.offset ?? 0,
             count: productListResponse.value.pagination?.count ?? 0,
             limit: AppConfig.PAGINATION.limit
         })
+        const url = location.url.pathname
         await nav(`${url}?offset=${offset}`)
-        paginationRouter.submit()
+        paginationActionRoute.submit()
     })
 
     useTask$(() => {
