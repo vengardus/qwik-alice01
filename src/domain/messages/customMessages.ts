@@ -5,6 +5,8 @@ export class CustomMessages {
   static msgLoading() {
     return 'Espere un momento por favor'
   }
+
+  // message crud
   static msgInsert() {
     return 'Agregando registro...'
   }
@@ -33,4 +35,13 @@ export class CustomMessages {
   static msgDeleteError(msg='')  {
     return `Ocurrió un error, no se pudo eliminar registro. ${msg}` 
   }
+
+  // message auth
+  static msgAuthError(msg='') {
+    return `Ocurrió un error, no se pudo autenticar. ${msg}` 
+  }
+  static msgAuthNotValid() {
+    return `Usuario o contraseña son incorrectas.` 
+  }
+  
 }

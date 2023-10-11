@@ -42,7 +42,7 @@ export default component$(({
 
   return (
     <nav class={`w-full ${colorClass} ${!isFixed ? '' : positionFixedClass}`}>
-      <div class="flex flex-wrap items-center justify-between mx-1auto px-3 h-full">
+      <div class="flex flex-wrap items-center justify-between mx-1auto pl-3 pr-4 h-full">
         {/* Logo */}
         <div class="w-3/12 h-full md:w-1/12">
           {

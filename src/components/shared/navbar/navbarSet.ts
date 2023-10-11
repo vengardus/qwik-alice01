@@ -44,22 +44,22 @@ export interface IMenuOption {
       isProject:true,
     },
     {
-      name: 'EFRTienda',
-      href: '/efrtienda',
-      title: 'EFRTienda',
-      description: 'Sitio Web de venta de equipos biométricos y captura de datos.',
-      detail:'Obtiene datos desde Supabase',
-      image:'biometria.jpg',
-      isProject:true
+      name: 'dashboard',
+      href: '/dashboard',
+      title: 'Dashboard',
+      description: '',
+      detail:'',
+      image:'',
+      isProject:false
     },
     {
-      name: 'Next.js 13 Proj1',
-      href: 'https://nextjs13-firstproject.vercel.app/',
-      title: 'Proyecto Ejm Next.js',
-      description: 'Primer proyecto con Next.js 13',
-      detail:'Jugando con Next.js',
-      image:'nextjs-proj01.png',
-      isProject:true
+      name: 'login',
+      href: '/login',
+      title: 'Login',
+      description: '',
+      detail:'',
+      image:'',
+      isProject:false
     },
     // {
     //   name: 'Counter',
