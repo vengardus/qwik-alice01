@@ -15,6 +15,10 @@ export class AuthController {
     }> {
         const oAuth = new Auth()
         const response = await oAuth.login(this.requestEvent, dataAuth)
+
+
+
+
         if (response.success)
             this.requestEvent.cookie.set(
                 'app-token',
@@ -24,4 +28,6 @@ export class AuthController {
 
         return response
     }
+
+
 }
