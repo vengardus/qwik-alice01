@@ -15,10 +15,10 @@ export class AuthService {
         console.log(dataAuth)
         const supabase = Supabase.connect(this.requestEvent)
 
-        const data0 = await supabase
-        .from('users')
-        .select("*")
-        console.log('service-getAll', data0)
+        // const data0 = await supabase
+        // .from('users')
+        // .select("*")
+        // console.log('service-getAll', data0)
 
         const data = await supabase
         .from('users')

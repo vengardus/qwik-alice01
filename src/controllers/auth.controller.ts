@@ -16,7 +16,7 @@ export class AuthController {
     }> {
         const oAuth = new Auth()
         const response = await oAuth.login(this.requestEvent, dataAuth)
-
+        console.log('controller', response)
         if (response.success) {
             // const secret = new TextEncoder().encode(
             //     'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
@@ -24,6 +24,7 @@ export class AuthController {
             const secret = new TextEncoder().encode(
                 this.requestEvent.env.get('APP_TOKEN_KEY')
             )
+            console.log('secret:', secret)
             const alg = 'HS256'
             const data = {
                 id: response.user?.id,
@@ -35,7 +36,7 @@ export class AuthController {
                 .setExpirationTime('2h')
                 .sign(secret)
 
-            console.log(jwt)
+            console.log('JWT', jwt)
 
             this.requestEvent.cookie.set(
                 'app-token',
