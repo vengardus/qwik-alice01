@@ -1,6 +1,6 @@
 import { component$, $, useSignal, useTask$, useStore } from "@builder.io/qwik";
 import { routeAction$, routeLoader$, useLocation, useNavigate, z, zod$ } from "@builder.io/qwik-city";
-import { ProductController } from "~/controllers/product.controller";
+import { ProductController } from "~/presentation/controllers/product.controller";
 import type { IListProductDto } from "~/domain/dtos/product.dto";
 import { CustomMessages } from "~/domain/messages/customMessages";
 import { AppConfig } from "~/domain/app.config";

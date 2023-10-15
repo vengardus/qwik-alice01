@@ -1,5 +1,6 @@
 import { type RequestEventBase } from "@builder.io/qwik-city";
 import { createServerClient } from 'supabase-auth-helpers-qwik';
+import { envs } from "~/config/envs";
 
 export interface ISupabaseResponse {
   error: {
@@ -16,11 +17,11 @@ export interface ISupabaseResponse {
 
 
 export class Supabase {
-  public static connect = (requestEv: RequestEventBase) => {
+  public static connect = (requestEvent: RequestEventBase) => {
     return createServerClient(
-      requestEv.env.get("PUBLIC_SUPABASE_URL")!,
-      requestEv.env.get("PUBLIC_SUPABASE_ANON_KEY")!,
-      requestEv
-    );
+      envs(requestEvent).PUBLIC_SUPABASE_URL!,
+      envs(requestEvent).PUBLIC_SUPABASE_ANON_KEY!,
+      requestEvent
+    );  
   }
 }

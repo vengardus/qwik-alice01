@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { Form, routeAction$, routeLoader$, useNavigate, z, zod$ } from "@builder.io/qwik-city";
-import { ProductController } from "~/controllers/product.controller";
+import { ProductController } from "~/presentation/controllers/product.controller";
 import { AppConfig } from "~/domain/app.config";
 import { Product } from "~/domain/model/product.model";
 import { type ISupabaseResponse, Supabase } from "~/infrastructure/data/supabase/supabase";

@@ -2,23 +2,18 @@ import { type RequestEventBase } from "@builder.io/qwik-city";
 import { type IDataResponse } from "~/domain/dtos/app.dto";
 import { Supabase } from "./supabase";
 
-export class AuthService {
+export class UserService {
     constructor(private requestEvent: RequestEventBase) {
 
     }
 
-    async login(dataAuth: {
-        username: string,
-        password: string
-    }): Promise<IDataResponse> {
-        const { username, password } = dataAuth
+    async getByColumn(column:string, value:string): Promise<IDataResponse> {
         const supabase = Supabase.connect(this.requestEvent)
 
         const data = await supabase
         .from('users')
         .select("*")
-        .eq('username', username)
-        .eq('password', password)
+        .eq(column, value)
 
         return {
             data: data.data,

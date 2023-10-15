@@ -1,6 +1,6 @@
 import { component$, $, useSignal } from "@builder.io/qwik";
 import { routeAction$, routeLoader$, useLocation, useNavigate, z, zod$ } from "@builder.io/qwik-city";
-import { CategoryController } from "~/controllers/category.controller";
+import { CategoryController } from "~/presentation/controllers/category.controller";
 import type { IListCategoryDto } from "~/domain/dtos/category.dto";
 import { CustomMessages } from "~/domain/messages/customMessages";
 import { AppConfig } from "~/domain/app.config";
