@@ -30,6 +30,7 @@ export const FormProduct = component$<FormProductProps>(({
     const msgFormSignal = useSignal('')
 
     const postRegisterProduct = $(async () => {
+        console.log('postLoginUser')
         msgFormSignal.value = ''
         if (submitAction.value?.failed) {
             if (submitAction.value.fieldErrors?.name)

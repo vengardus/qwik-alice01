@@ -1,7 +1,7 @@
 import { Signal, component$, useSignal, useTask$, $, useVisibleTask$ } from '@builder.io/qwik';
 import { RequestHandler, routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
-import { supabaseClient } from '~/utils/supabase';
-import product, { IDataProduct, ISupabase, IProduct } from '../product';
+// import { supabaseClient } from '~/utils/supabase';
+// import product, { IDataProduct, ISupabase, IProduct } from '../product';
 
 // export const prodLoader = routeLoader$(async () => {
 //   console.log('routerLOader');
@@ -33,13 +33,13 @@ const getProductFunction = server$(async function (category: string) {
 })
 
 const getProductDB = server$(async function (pos:number=0) {
-  const supabase = supabaseClient(this);
+  // const supabase = supabaseClient(this);
 
   await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  const data = await supabase
-    .from('products')
-    .select('*').then(resp => resp) as ISupabase;
+  // const data = await supabase
+  //   .from('products')
+  //   .select('*').then(resp => resp) as ISupabase;
   
   console.log('getProductDB');
 
@@ -48,7 +48,7 @@ const getProductDB = server$(async function (pos:number=0) {
   //   const products = data.data as IDataProduct[]
   //   return products[0].data[0].name
   // }
-  return data.data![pos].name;
+  // return data.data![pos].name;
 })
 
 // export const onGet: RequestHandler = async ({ json }) => {
@@ -64,7 +64,7 @@ export default component$(() => {
   const isNavigatingSignal = useSignal('true');
   
   const x = $(async () => {
-    signalProduct.value = await getProductDB();
+    // signalProduct.value = await getProductDB();
     isNavigatingSignal.value = 'false';
     console.log('the function', isNavigatingSignal.value)
   })
@@ -72,7 +72,7 @@ export default component$(() => {
   //x();
 
   useTask$(async () => {
-    signalProduct.value = await getProductDB();
+    // signalProduct.value = await getProductDB();
     console.log('listo!');
     isNavigatingSignal.value = 'false';
   })
@@ -122,7 +122,7 @@ export default component$(() => {
       <button onClick$={async () => {
         const result = (await getProductDB(1));
         console.log(result);
-        signalProduct.value = result;
+        // signalProduct.value = result;
       }}>My product from DB</button>
       <div>Product: {signalProduct.value}</div>
     </div>

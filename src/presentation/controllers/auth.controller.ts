@@ -23,38 +23,27 @@ export class AuthController {
     ) {
         this.message = ''
     }
-    
+
+    private returnError(message:string):null {
+        this.message = message
+        return null
+    }
+
     async loginUser(loginUserDto: ILoginUserDto): Promise<IUserEntity | null> {
 
         const oUser = new UserModel(new DBSupabase(this.requestEvent))
         const oAuthDatasource = new AuthDatasourceImpl(oUser)
         const oAuthRepository = new AuthRepositoryImpl(oAuthDatasource)
         const userEntity = await oAuthRepository.login(loginUserDto)
-        if (!userEntity) {
-            this.message = CustomMessages.msgAuthNotValid()
-            return null
-        }
+        if (!userEntity) return this.returnError(CustomMessages.msgAuthNotValid())
 
         // genera token
-        const data = {
-            id: userEntity.uid
-        }
-        const jwt = await this.generateToken(
-            data,
-            envs(this.requestEvent).JWT_PRIVATE_KEY!
-        )
-        if (!jwt) {
-            this.message = CustomMessages.msgAuthError('No se pudo generar token.')
-            return null
-        }
+        const jwt = await this.generateToken({ uid: userEntity.uid }, envs(this.requestEvent).JWT_PRIVATE_KEY!)
+        if (!jwt) return this.returnError(CustomMessages.msgAuthError('No se pudo generar token.'))
 
         // save cookie
-        this.requestEvent.cookie.set(
-            AppConfig.KEYS.cokieNameJwt,
-            jwt!,
-            { secure: true, path: '/' }
-        )
-
+        this.requestEvent.cookie.set(AppConfig.KEYS.cokieNameJwt, jwt!, { secure: true, path: '/' })
+console.log('access:', userEntity)
         return userEntity
     }
 

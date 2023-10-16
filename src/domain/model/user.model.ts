@@ -1,4 +1,3 @@
-import { type RequestEventBase } from "@builder.io/qwik-city"
 import { type IRegisterUserDto } from "../dtos/user.dto"
 import { type IUserEntity } from "../entity/user.entity"
 

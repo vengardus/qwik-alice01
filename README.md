@@ -19,6 +19,9 @@ ppnpm qwik add auth
 
 pnpm add @supabase/supabase-js supabase-auth-helpers-qwik
 
+pnpm add jose
+pnpm add @unpic/qwik
+
 pnpm add csvtojson
 ```
 

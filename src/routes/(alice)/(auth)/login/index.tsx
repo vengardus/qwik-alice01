@@ -1,4 +1,4 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
+import { component$, useStylesScoped$} from '@builder.io/qwik';
 import { Form, routeAction$, zod$, z } from '@builder.io/qwik-city';
 import styles from './login.css?inline';
 import { AuthController } from '~/presentation/controllers/auth.controller';
@@ -29,7 +29,9 @@ export default component$(() => {
     useStylesScoped$(styles);
 
     return (
-        <Form action={loginAction} class="login-form">
+        <Form action={loginAction}
+            class="login-form"
+        >
             <div class="relative">
                 <input name="username" type="text" placeholder="Username" />
                 <label for="username">Username</label>
@@ -43,7 +45,7 @@ export default component$(() => {
             </div>
 
             {loginAction.isRunning && <div>Validando, espere un momento...</div>}
-            {!loginAction.value?.success && loginAction.value?.message && <div class='text-red-600'>{loginAction.value?.message}</div>}
+            {!loginAction.value?.success && loginAction.value?.message && <div class='text-red-600'>{loginAction.value.message}</div>}
 
         </Form>
     )

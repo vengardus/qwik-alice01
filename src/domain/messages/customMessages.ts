@@ -43,5 +43,17 @@ export class CustomMessages {
   static msgAuthNotValid() {
     return `Usuario o contraseña son incorrectas.` 
   }
+  static msgAuthErrorTokenNotFound() {
+    return `Token no encontrado.` 
+  }
+  static msgAuthErrorTokenCreate() {
+    return `Error al crear token.` 
+  }
+  static msgAuthErrorTokenNotValid() {
+    return `Error en token, token no válido-` 
+  }
+  static msgAuthErrorTokenUser() {
+    return `Error en token, usuario no encontrado.` 
+  }
   
 }

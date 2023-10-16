@@ -6,60 +6,82 @@ export interface IMenuOption {
     detail: string,
     image: string,
     isProject: boolean,
-    childs?: IMenuOptionChlid[]
-  }
-  
-  interface IMenuOptionChlid {
+    childs?: IMenuOptionChlid[],
+    isAuth?: boolean
+}
+
+interface IMenuOptionChlid {
     title: string,
     href: string
-  }
-  
-  export const navigationMenu:IMenuOption[] = [
+}
+
+export const navigationMenu: IMenuOption[] = [
     {
-      name: 'catalogo',
-      href: '',
-      title: 'Catálogo',
-      description: 'Listado de catálogos',
-      detail:'',
-      image:'',
-      isProject:false,
-      childs: [
-        {
-          title:'Productos',
-          href: '/product'
-        },
-        {
-          title:'Categorías',
-          href: '/category'
-        },
-      ]
+        name: 'catalogo',
+        href: '',
+        title: 'Catálogo',
+        description: 'Listado de catálogos',
+        detail: '',
+        image: '',
+        isProject: false,
+        childs: [
+            {
+                title: 'Productos',
+                href: '/product'
+            },
+            {
+                title: 'Categorías',
+                href: '/category'
+            },
+        ]
     },
     {
-      name: 'SpaceX',
-      href: '/product',
-      title: 'Products 2',
-      description: 'Listado de Lanzamientos de SpaceX',
-      detail:'Obtiene datos de su Api pública.',
-      image:'spacex4.jpg',
-      isProject:true,
+        name: 'SpaceX',
+        href: '/product',
+        title: 'Products 2',
+        description: 'Listado de Lanzamientos de SpaceX',
+        detail: 'Obtiene datos de su Api pública.',
+        image: 'spacex4.jpg',
+        isProject: true,
     },
     {
-      name: 'dashboard',
-      href: '/dashboard',
-      title: 'Dashboard',
-      description: '',
-      detail:'',
-      image:'',
-      isProject:false
+        name: 'dashboard',
+        href: '/dashboard',
+        title: 'Dashboard',
+        description: '',
+        detail: '',
+        image: '',
+        isProject: false
     },
     {
-      name: 'login',
-      href: '/login',
-      title: 'Login',
-      description: '',
-      detail:'',
-      image:'',
-      isProject:false
+        name: 'login',
+        href: '/login',
+        title: 'Acceder',
+        description: '',
+        detail: '',
+        image: '',
+        isProject: false,
+        isAuth: false
+    },
+    {
+        name: 'micuenta',
+        href: '',
+        title: 'Mi Cuenta',
+        description: '',
+        detail: '',
+        image: '',
+        isProject: false,
+        isAuth: true,
+        childs: [
+            {
+                title: 'Cerrar Sesión',
+                href: '/product'
+            },
+            {
+                title: 'Mi Perfil',
+                href: '/category'
+            },
+        ]
     },
     // {
     //   name: 'Counter',
@@ -102,4 +124,4 @@ export interface IMenuOption {
     //   href: '/about',
     //   isProject:false
     // },
-  ]
+]
