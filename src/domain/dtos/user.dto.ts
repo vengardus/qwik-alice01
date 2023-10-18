@@ -9,6 +9,6 @@ export interface IListUserDto extends IDataResponse {
 export interface IRegisterUserDto {
   username: string
   password: string
-  profileType: string
+  role: string
   email: string
 }

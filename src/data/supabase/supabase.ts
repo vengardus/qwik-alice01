@@ -19,6 +19,7 @@ export interface ISupabaseResponse {
 
 
 export class DBSupabase extends DB {
+
     connect
 
     constructor(requestEvent: RequestEventBase) {
@@ -57,7 +58,7 @@ export class DBSupabase extends DB {
             .from(tableName)
             .select("*")
             .eq(column, value)
-
+        
         return {
             data: data.data,
             pagination: null,
@@ -66,5 +67,18 @@ export class DBSupabase extends DB {
         }
     }
 
+    async insert(tablename:string, object: object): Promise<IDataResponse> {
+        const data = await this.connect
+            .from(tablename)
+            .insert([object])
+            .select()
+
+        return {
+            data: (data.data) ? data.data : null,
+            pagination: null,
+            success: (data.status == 201) ? true : false,
+            message: data.error?.message ?? null
+        }
+    }
 
 }

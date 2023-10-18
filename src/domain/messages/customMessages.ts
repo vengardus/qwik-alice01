@@ -55,5 +55,8 @@ export class CustomMessages {
   static msgAuthErrorTokenUser() {
     return `Error en token, usuario no encontrado.` 
   }
+  static msgAuthSignInUserExist() {
+    return `Error. Usuario ya existe.` 
+  }
   
 }

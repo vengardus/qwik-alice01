@@ -11,16 +11,13 @@ interface IAppContext {
 export const appContext = createContextId<IAppContext>('appContext');
 
 export const useCheckAuth = routeLoader$(async (requestEvent) => {
-  console.log('chekAUTH layout (alice)')
   const [messageError, userEntity] = await AuthMiddleware.verifyJWT(requestEvent)
   if (!userEntity) {
     console.log('Error::',messageError)
-    //requestEvent.redirect(302, '/')
     return {
       success: false
     }
   }
-  console.log('access:Userentity:', userEntity.uid, userEntity.username)
   return {
     success: true,
     userEntity
@@ -36,11 +33,12 @@ export default component$(() => {
   
   useTask$(async({track}) => {
     track(()=>checkAuth.value)
-    console.log('usetask')
+    dataAppContext.isAuth = false
+    dataAppContext.userEntity = null
     if (checkAuth.value.success) {
-      console.log('Auorizado!!!')
       dataAppContext.isAuth = true
       dataAppContext.userEntity = checkAuth.value.userEntity!
+      console.log('Usuario autorizado', dataAppContext.userEntity.username)
     }
   })
 

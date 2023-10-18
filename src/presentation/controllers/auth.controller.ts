@@ -9,6 +9,7 @@ import { AuthRepositoryImpl } from "~/infrastructure/repository/auth.repository.
 import { AuthDatasourceImpl } from "~/infrastructure/datasource/auth.datasource.impl";
 import { CustomMessages } from "~/domain/messages/customMessages";
 import { UserModel } from "~/data/supabase/models/user.model";
+import { type IRegisterUserDto } from "~/domain/dtos/user.dto";
 
 
 type GenerateToken = (payload: Object, jwtPrivateKey: string) => Promise<string | null>;
@@ -30,11 +31,10 @@ export class AuthController {
     }
 
     async loginUser(loginUserDto: ILoginUserDto): Promise<IUserEntity | null> {
-
         const oUser = new UserModel(new DBSupabase(this.requestEvent))
-        const oAuthDatasource = new AuthDatasourceImpl(oUser)
-        const oAuthRepository = new AuthRepositoryImpl(oAuthDatasource)
-        const userEntity = await oAuthRepository.login(loginUserDto)
+        const oAuthDatasourceImpl = new AuthDatasourceImpl(oUser)
+        const oAuthRepositoryImpl = new AuthRepositoryImpl(oAuthDatasourceImpl)
+        const userEntity = await oAuthRepositoryImpl.login(loginUserDto)
         if (!userEntity) return this.returnError(CustomMessages.msgAuthNotValid())
 
         // genera token
@@ -43,8 +43,21 @@ export class AuthController {
 
         // save cookie
         this.requestEvent.cookie.set(AppConfig.KEYS.cokieNameJwt, jwt!, { secure: true, path: '/' })
-console.log('access:', userEntity)
         return userEntity
+    }
+
+    async registerUser(registerUser:IRegisterUserDto):Promise<IUserEntity|null> {
+        console.log('controller-registerUser')
+        const oUser = new UserModel(new DBSupabase(this.requestEvent))
+        const oAuthDatasourceImpl = new AuthDatasourceImpl(oUser)
+        const oAuthRepositoryImpl = new AuthRepositoryImpl(oAuthDatasourceImpl)
+        const [messageError, userEntity] = await oAuthRepositoryImpl.registerUser(registerUser)
+        console.log('registerUser:', messageError, userEntity)
+        return null
+    }
+
+    async logout() {
+        this.requestEvent.cookie.delete(AppConfig.KEYS.cokieNameJwt, { path: '/' })
     }
 
 }

@@ -34,4 +34,6 @@ export abstract class Model {
     abstract getById(value: number): Promise<IDataResponse>
 
     abstract getByColumn(column: string, value: string | number): Promise<IDataResponse>
+
+    abstract insert(object:object):Promise<IDataResponse>
 }

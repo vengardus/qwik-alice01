@@ -28,4 +28,12 @@ export abstract class SupabaseModel extends Model {
         this.TO = data.data ? data.data[0] : null
         return data
     }
+
+    async insert(object: object): Promise<IDataResponse> {
+        const data = await this.oDB.insert(this.tableName, object)
+        this.TO = data.data? data.data[0] : null
+        return data
+    }
+    
 }
+

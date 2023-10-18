@@ -23,6 +23,7 @@ export default component$(({
     const mainMenu = useSignal(false)
     const dataAppContext = useContext(appContext);
 
+
     const changeDropdownMenu = $((submenu: string) => {
         const elementsDropDown = document.getElementsByClassName('dropNavBar');
         for (let i = 0; i < elementsDropDown.length; i++) {
@@ -47,10 +48,6 @@ export default component$(({
         <nav class={`w-full ${colorClass} ${!isFixed ? '' : positionFixedClass}`}>
             <div class="flex flex-wrap items-center justify-between mx-1auto pl-3 pr-7 h-full">
                 {/* Logo */}
-                <div>
-                    {dataAppContext.isAuth ? 'Auth!!!' : 'Not Auth'}
-                </div>
-
                 <div class="w-3/12 h-full md:w-1/12"> {
                     (logo) &&
                     <Link href="/" class="flex w-full h-full">

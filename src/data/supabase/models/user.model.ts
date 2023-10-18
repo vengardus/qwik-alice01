@@ -43,40 +43,40 @@ export class UserModel extends SupabaseModel {
 
 }
 
-export class ProductModel extends SupabaseModel {
-    TO: IProductModel | null
-    aTO: IProductModel[]
-    tableName: string
-    modelName: string
-    pluralModalName: string
+// export class ProductModel extends SupabaseModel {
+//     TO: IProductModel | null
+//     aTO: IProductModel[]
+//     tableName: string
+//     modelName: string
+//     pluralModalName: string
 
-    constructor(oDb: DBSupabase) {
-        super(oDb)
-        this.TO = null
-        this.aTO = []
-        this.tableName = 'products'
-        this.modelName = 'Producto'
-        this.pluralModalName = 'Productos'
-    }
+//     constructor(oDb: DBSupabase) {
+//         super(oDb)
+//         this.TO = null
+//         this.aTO = []
+//         this.tableName = 'products'
+//         this.modelName = 'Producto'
+//         this.pluralModalName = 'Productos'
+//     }
 
-}
+// }
 
-export class CategoryModel extends SupabaseModel {
-    TO: any
-    aTO: any[]
-    tableName: string
-    modelName: string
-    pluralModalName: string
+// export class CategoryModel extends SupabaseModel {
+//     TO: any
+//     aTO: any[]
+//     tableName: string
+//     modelName: string
+//     pluralModalName: string
 
-    constructor(oDb:DBSupabase) {
-        super(oDb)
-        this.TO = null
-        this.aTO=[]
-        this.tableName='categories'
-        this.modelName='Categoría'
-        this.pluralModalName='Categorias'
-    }
-}
+//     constructor(oDb:DBSupabase) {
+//         super(oDb)
+//         this.TO = null
+//         this.aTO=[]
+//         this.tableName='categories'
+//         this.modelName='Categoría'
+//         this.pluralModalName='Categorias'
+//     }
+// }
 
 
 

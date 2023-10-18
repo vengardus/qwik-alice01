@@ -75,7 +75,7 @@ export const navigationMenu: IMenuOption[] = [
         childs: [
             {
                 title: 'Cerrar Sesión',
-                href: '/product'
+                href: '/logout'
             },
             {
                 title: 'Mi Perfil',

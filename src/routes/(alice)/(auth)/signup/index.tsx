@@ -1,68 +1,63 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
-import { Form, routeAction$, zod$, z } from '@builder.io/qwik-city';
-
+import { component$, useStylesScoped$} from '@builder.io/qwik';
+import { Form, routeAction$, zod$, z, Link } from '@builder.io/qwik-city';
+import { AuthController } from '~/presentation/controllers/auth.controller';
+import { type IRegisterUserDto } from '~/domain/dtos/user.dto';
 import styles from '../login/login.css?inline';
-import { Supabase } from '~/infrastructure/data/supabase/supabase';
 
-export const useLoginUserAction = routeAction$(async (dataForm, requestEvent) => {
-    const { email } = dataForm
-    const auth: {
-        success: boolean,
-        message: string
-    } = {
-        success: false,
-        message: ''
+
+export const useRegisterUserAction = routeAction$(async (data, requestEvent) => {
+    console.log('useRegisterUser')
+    const oAuthController = new AuthController(requestEvent)
+    const registerUser:IRegisterUserDto = {
+        username:data.username,
+        password:data.password,
+        role:'user',
+        email:''
     }
-
-    // SignUp
-    const timestamp = Date.now()
-    const password = Math.floor(Math.random() * 100000) + email + timestamp
-
-    const supabase = Supabase.connect(requestEvent)
-    const { error } = await supabase.auth.signUp({
-        email: email,
-        password: password
-    })
-
-    if (error)
-        auth.message = 'Ocurrió algún error. ' + error.message
-    else {
-        auth.message = auth.message = 'Operación exitosa. Por favor verifique su bandeja de correo (folder recibidos o spam).'
-        auth.success = true
-    }
-
+    const userEntity = await oAuthController.registerUser(registerUser)
+    if (!userEntity)
+        return {
+            success: false,
+            message: oAuthController.message
+        }
+    requestEvent.redirect(302, '/')
     return {
         success: true,
-        auth: auth
+        userEntity
     }
 }, zod$({
-    email: z.string().email('Email no válido!'),
-}))
+    username: z.string().min(4, 'Mínimo 4 caracteres'),
+    password: z.string().min(4, 'Mínimo 4 caracteres')
+})
+)
 
 
 export default component$(() => {
-    const action = useLoginUserAction()
-
+    const registerUserAction = useRegisterUserAction()
     useStylesScoped$(styles);
 
     return (
-        <Form
-            action={action}
-            preventdefault: submit
-            class="login-form mt-7">
-            <div>SignUp</div>
+        <Form action={registerUserAction}
+            class="login-form"
+        >
             <div class="relative">
-                <input name="email" type="text" placeholder="Email address" />
-                <label for="email">Email Address</label>
+                <input name="username" type="text" placeholder="Username" />
+                <label for="username">Username</label>
+            </div>
+            <div class="relative">
+                <input id="password" name="password" type="password" placeholder="Password" />
+                <label for="password">Password</label>
+            </div>
+            <div class="relative">
+                <button>Regsitrar</button>
             </div>
 
-            <div class="relative">
-                <button type='submit'>Registrar</button>
-            </div>
+            {registerUserAction.isRunning && <div>Validando, espere un momento...</div>}
+            {!registerUserAction.value?.success && registerUserAction.value?.message && <div class='text-red-600'>{registerUserAction.value.message}</div>}
 
-            <code>
-                {JSON.stringify(action.value, undefined, 2)}
-            </code>
+            <div>
+                <Link href="/login">Ya tengo una cuenta</Link>
+            </div>
         </Form>
     )
 });
