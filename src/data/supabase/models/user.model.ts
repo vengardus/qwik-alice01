@@ -10,20 +10,20 @@ export interface IUserModel {
     role: string
 }
 
-interface IProductModel {
-    id: number
-    name: string
-    description: string
-    price: number
-    currency: string
-}
+// interface IProductModel {
+//     id: number
+//     name: string
+//     description: string
+//     price: number
+//     currency: string
+// }
 
-export interface ICategoryModel {
-    id: number
-    name: string
-    created_at: any
-    update_at: any
-}
+// export interface ICategoryModel {
+//     id: number
+//     name: string
+//     created_at: any
+//     update_at: any
+// }
 
 export class UserModel extends SupabaseModel {
     TO: IUserModel | null

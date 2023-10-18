@@ -25,7 +25,7 @@ export class AuthController {
         this.message = ''
     }
 
-    private returnError(message:string):null {
+    private returnError(message: string): null {
         this.message = message
         return null
     }
@@ -38,26 +38,39 @@ export class AuthController {
         if (!userEntity) return this.returnError(CustomMessages.msgAuthNotValid())
 
         // genera token
-        const jwt = await this.generateToken({ uid: userEntity.uid }, envs(this.requestEvent).JWT_PRIVATE_KEY!)
-        if (!jwt) return this.returnError(CustomMessages.msgAuthError('No se pudo generar token.'))
-
-        // save cookie
-        this.requestEvent.cookie.set(AppConfig.KEYS.cokieNameJwt, jwt!, { secure: true, path: '/' })
-        return userEntity
+        // const jwt = await this.generateToken({ uid: userEntity.uid }, envs(this.requestEvent).JWT_PRIVATE_KEY!)
+        // if (!jwt) return this.returnError(CustomMessages.msgAuthError('No se pudo generar token.'))
+        // // save cookie
+        // this.requestEvent.cookie.set(AppConfig.KEYS.cokieNameJwt, jwt!, { secure: true, path: '/' })
+        //return userEntity
+        return this.saveCookie(userEntity)
     }
 
-    async registerUser(registerUser:IRegisterUserDto):Promise<IUserEntity|null> {
+    async registerUser(registerUser: IRegisterUserDto): Promise<IUserEntity | null> {
         console.log('controller-registerUser')
         const oUser = new UserModel(new DBSupabase(this.requestEvent))
         const oAuthDatasourceImpl = new AuthDatasourceImpl(oUser)
         const oAuthRepositoryImpl = new AuthRepositoryImpl(oAuthDatasourceImpl)
         const [messageError, userEntity] = await oAuthRepositoryImpl.registerUser(registerUser)
         console.log('registerUser:', messageError, userEntity)
-        return null
+        if (!userEntity) return null
+        
+        return this.saveCookie(userEntity)
     }
 
     async logout() {
         this.requestEvent.cookie.delete(AppConfig.KEYS.cokieNameJwt, { path: '/' })
+    }
+
+    private async saveCookie(userEntity: IUserEntity): Promise<IUserEntity | null> {
+        // genera token
+        const jwt = await this.generateToken({ uid: userEntity.uid }, envs(this.requestEvent).JWT_PRIVATE_KEY!)
+        if (!jwt) return this.returnError(CustomMessages.msgAuthError('No se pudo generar token.'))
+
+        // save cookie
+        this.requestEvent.cookie.set(AppConfig.KEYS.cokieNameJwt, jwt!, { secure: true, path: '/' })
+
+        return userEntity
     }
 
 }

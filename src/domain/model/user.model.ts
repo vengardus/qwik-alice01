@@ -39,7 +39,7 @@ export class User {
             username: String(username).toUpperCase(),
             password: String(password),
             email: '',
-            profileType: 'user'
+            role: 'user'
         }]
     }
 
