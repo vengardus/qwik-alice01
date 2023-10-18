@@ -52,6 +52,7 @@ export class AuthController {
         const oAuthDatasourceImpl = new AuthDatasourceImpl(oUser)
         const oAuthRepositoryImpl = new AuthRepositoryImpl(oAuthDatasourceImpl)
         const [messageError, userEntity] = await oAuthRepositoryImpl.registerUser(registerUser)
+        this.message = messageError?? ''
         console.log('registerUser:', messageError, userEntity)
         if (!userEntity) return null
         
