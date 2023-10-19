@@ -21,6 +21,8 @@ pnpm add @supabase/supabase-js supabase-auth-helpers-qwik
 
 pnpm add jose
 pnpm add @unpic/qwik
+pnpm add crypto-js
+pnpm add @types/crypto-js
 
 pnpm add csvtojson
 ```

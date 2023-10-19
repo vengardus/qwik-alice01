@@ -35,5 +35,11 @@ export abstract class Model {
 
     abstract getByColumn(column: string, value: string | number): Promise<IDataResponse>
 
-    abstract insert(object:object):Promise<IDataResponse>
+    abstract insert(object: object): Promise<IDataResponse>
+
+    abstract getAllPagination({ offset = 0, limit = 1 }:{offset:number, limit:number}): Promise<IDataResponse>
+
+    abstract update(id: number, object: object): Promise<IDataResponse> 
+
+    abstract delete(id: number): Promise<IDataResponse> 
 }

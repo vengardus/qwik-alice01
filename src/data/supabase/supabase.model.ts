@@ -17,6 +17,12 @@ export abstract class SupabaseModel extends Model {
         return data
     }
 
+    async getAllPagination({ offset, limit }: { offset: number; limit: number }): Promise<IDataResponse> {
+        const data = await this.oDB.getAllPagination(this.tableName, { offset, limit })
+        this.aTO = data.data
+        return data
+    }
+
     async getById(value: number): Promise<IDataResponse> {
         const data = await this.oDB.getById(this.tableName, value)
         this.TO = data.data[0] ?? null
@@ -31,9 +37,21 @@ export abstract class SupabaseModel extends Model {
 
     async insert(object: object): Promise<IDataResponse> {
         const data = await this.oDB.insert(this.tableName, object)
-        this.TO = data.data? data.data[0] : null
+        this.TO = data.data ? data.data[0] : null
         return data
     }
+
+    async update(id: number, object: object): Promise<IDataResponse> {
+        const data = await this.oDB.update(this.tableName, id, object)
+        this.TO = data.data ? data.data[0] : null
+        return data
+    }
+
+    async delete(id: number): Promise<IDataResponse> {
+        const data = await this.oDB.delete(this.tableName, id)
+        return data
+    }
+
     
 }
 
