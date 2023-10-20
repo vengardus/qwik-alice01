@@ -5,7 +5,7 @@ import { ListViewHeader } from "../shared/listview/ListViewHeader";
 import { ListViewDatatHeader } from "../shared/listview/ListViewDataHeader";
 import { type IListProductDto } from "~/domain/dtos/product.dto";
 import { type IProductEntity } from "~/domain/entity/product.entity";
-import { Product } from "~/domain/model/product.model";
+import { ProductModel } from "~/data/supabase/models/product.model";
 
 
 export interface ListProductProps {
@@ -26,7 +26,7 @@ export const ListProduct = component$<ListProductProps>(({
     return (
         <div class="flex flex-col space-y-3 w-full">
             <ListViewHeader
-                title={Product.modelNamePlural}
+                title={ProductModel.pluralModalName}
                 insertAction$={insertAction$}
             />
 

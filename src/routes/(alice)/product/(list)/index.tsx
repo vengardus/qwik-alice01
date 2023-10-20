@@ -8,8 +8,8 @@ import type { IProductEntity } from "~/domain/entity/product.entity";
 import { Modal } from '~/components/shared/modal/Modal';
 import { ListProduct } from "~/components/product/ListProduct";
 import { FormProduct } from "~/components/product/FormProduct";
-import { Pagination } from "~/domain/model/pagination.model";
-import { Product } from "~/domain/model/product.model";
+import { Pagination } from "~/domain/models/pagination.model";
+import { ProductModel } from "~/data/supabase/models/product.model";
 
 
 export const useGetProductList = routeLoader$<IListProductDto>(async (requestEvent) => {
@@ -97,7 +97,7 @@ export default component$(() => {
     });
 
     const initInputs = $(() => {
-        const data = Product.initInputs()
+        const data = ProductModel.initInputs()
         idSignal.value = data.id
         descriptionSignal.value = data.description
         nameSignal.value = data.name

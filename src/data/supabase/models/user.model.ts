@@ -29,16 +29,14 @@ export class UserModel extends SupabaseModel {
     TO: IUserModel | null
     aTO: IUserModel[]
     tableName: string
-    modelName: string
-    pluralModalName: string
+    static modelName: string = 'Usuario'
+    static pluralModalName: string = 'Usuarios'
 
     constructor(oDb: DBSupabase) {
         super(oDb)
         this.TO = null
         this.aTO = []
         this.tableName = 'users'
-        this.modelName = 'Usuario'
-        this.pluralModalName = 'Usuarios'
     }
 
 }

@@ -1,29 +1,29 @@
-import { type IProductEntity } from "../entity/product.entity"
-import type { IRegisterProductDto } from "../dtos/product.dto"
+import { SupabaseModel } from "../supabase.model"
+import { type DBSupabase } from "../supabase"
 
+export interface IProductModel {
+    id: number
+    name: string
+    description: string
+    price: number
+    currency: string
+}
 
-export class Product {
-    static modelName = 'Producto'
-    static modelNamePlural = 'Productos'
+export class ProductModel extends SupabaseModel {
+    TO: IProductModel | null
+    aTO: IProductModel[]
+    tableName: string
+    static modelName: string = 'Producto'
+    static pluralModalName: string = 'Productos'
 
-    constructor(
-        private aTO: IProductEntity[] = []
-    ) { }
-
-    count() {
-        return this.aTO.length
+    constructor(oDb: DBSupabase) {
+        super(oDb)
+        this.TO = null
+        this.aTO = []
+        this.tableName = 'products'
     }
 
-    getATO() {
-        return this.aTO
-    }
-
-    setATO(data: IProductEntity[]) {
-        this.aTO = data
-    }
-
-    static preValidateObject(object: { [key: string]: any })
-        : string | undefined {
+    static preValidateObject(object: { [key: string]: any }): string | undefined {
         const { name, description, price, currency } = object
         if (!name) return 'Ingrese nombre'
         if (!description) return 'Ingrese descripción'
@@ -33,13 +33,13 @@ export class Product {
     }
 
     static validateObject(object: { [key: string]: any })
-        : [string?, IRegisterProductDto?] {
+        : [string | undefined, object: object] {
         const { name, description, price, currency } = object
         const messageError = this.preValidateObject(object)
-        if (messageError) return [messageError, undefined]
+        if (messageError) return [messageError, object]
 
         const priceToNumber = Number(price);
-        if (Number.isNaN(priceToNumber) || priceToNumber <= 0) return ['Error en precio']
+        if (Number.isNaN(priceToNumber) || priceToNumber <= 0) return ['Error en precio', object]
 
         return [undefined, {
             name: String(name).toUpperCase(),
@@ -64,6 +64,7 @@ export class Product {
             price: '',
         }
     }
-
-
 }
+
+
+

@@ -4,8 +4,8 @@ export abstract class Model {
     abstract TO: any | null
     abstract aTO: any[]
     abstract readonly tableName: string
-    abstract readonly modelName: string
-    abstract readonly pluralModalName: string
+    static readonly modelName: string = ''
+    static readonly pluralModalName: string = ''
     message: string = ''
 
     count(): number {
@@ -19,10 +19,9 @@ export abstract class Model {
     }
 
     static validateObject(object: { [key: string]: any })
-        : string | undefined {
-        // validaciones extras, si falla, devuelve mensaje de error
-        console.log(object)
-        return
+        : [string | undefined, object:object] {
+        // validaciones extras, devuele mensaje de error y object
+        return [undefined, object]
     }
 
     static initInputs(): { [key: string]: string } {

@@ -72,7 +72,7 @@ export const FormCategory = component$<FormCategoryProps>(({
                     <input name="name" bind: value={nameSignal} />
                 </div>
 
-                <button type="submit" class='button'>{
+                <button type="submit" class={`button`}>{
                     (typeActionSignal.value == AppConfig.ACTION.insert)
                         ? 'Agregar'
                         : 'Actualizar'

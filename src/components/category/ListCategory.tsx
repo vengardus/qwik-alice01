@@ -5,7 +5,7 @@ import { ListViewHeader } from "../shared/listview/ListViewHeader";
 import { ListViewDatatHeader } from "../shared/listview/ListViewDataHeader";
 import { type IListCategoryDto } from "~/domain/dtos/category.dto";
 import { type ICategoryEntity } from "~/domain/entity/category.entity";
-import { Category } from "~/domain/model/category.model";
+import { CategoryModel } from "~/data/supabase/models/category.model";
 
 
 export interface ListCategoryProps {
@@ -26,7 +26,7 @@ export const ListCategory = component$<ListCategoryProps>(({
     return (
         <div class="flex flex-col space-y-3 w-full">
             <ListViewHeader
-                title={Category.modelNamePlural}
+                title={CategoryModel.pluralModalName}
                 insertAction$={insertAction$}
             />
 
