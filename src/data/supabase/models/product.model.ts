@@ -33,7 +33,7 @@ export class ProductModel extends SupabaseModel {
     }
 
     static validateObject(object: { [key: string]: any })
-        : [string | undefined, object: object] {
+        : [string | undefined, object] {
         const { name, description, price, currency } = object
         const messageError = this.preValidateObject(object)
         if (messageError) return [messageError, object]

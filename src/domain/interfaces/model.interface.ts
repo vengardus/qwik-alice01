@@ -19,7 +19,7 @@ export abstract class Model {
     }
 
     static validateObject(object: { [key: string]: any })
-        : [string | undefined, object:object] {
+        : [string | undefined, object] {
         // validaciones extras, devuele mensaje de error y object
         return [undefined, object]
     }

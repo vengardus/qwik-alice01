@@ -29,7 +29,7 @@ export class CategoryModel extends SupabaseModel  {
         return undefined    
     }
 
-    static validateObject(object: { [key: string]: any }): [string | undefined, object: object] {
+    static validateObject(object: { [key: string]: any }): [string | undefined, object] {
         const { name } = object
         const messageError = this.preValidateObject(object)
         if (messageError) return [messageError, object]
