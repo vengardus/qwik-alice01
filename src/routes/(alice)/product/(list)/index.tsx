@@ -8,7 +8,7 @@ import type { IProductEntity } from "~/domain/entity/product.entity";
 import { Modal } from '~/components/shared/modal/Modal';
 import { ListProduct } from "~/components/product/ListProduct";
 import { FormProduct } from "~/components/product/FormProduct";
-import { Pagination } from "~/domain/models/pagination.model";
+import { Pagination } from "~/domain/core/models/pagination.model";
 import { ProductModel } from "~/data/supabase/models/product.model";
 
 

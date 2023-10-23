@@ -1,4 +1,4 @@
-import { AppConfig } from "../app.config"
+import { AppConfig } from "~/domain/app.config"
 
 interface ICalculateNewOffset {
     typeAction: string,

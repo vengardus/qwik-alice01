@@ -1,8 +1,13 @@
 import { type IDataResponse } from "~/domain/dtos/app.dto"
 
+
+export interface IModel {
+    id:number
+}
+
 export abstract class Model {
-    abstract TO: any | null
-    abstract aTO: any[]
+    abstract TO: IModel | null
+    abstract aTO: IModel[]
     abstract readonly tableName: string
     static readonly modelName: string = ''
     static readonly pluralModalName: string = ''

@@ -1,8 +1,10 @@
 import { SupabaseModel } from "../supabase.model"
 import { type DBSupabase } from "../supabase"
+import { type IModel } from "~/domain/core/interfaces/model.interface"
 
-export interface IProductModel {
-    id: number
+
+export interface IProductModel extends IModel{
+    //id: number
     name: string
     description: string
     price: number

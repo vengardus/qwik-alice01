@@ -1,9 +1,10 @@
 import { SupabaseModel } from "../supabase.model"
 import { type DBSupabase } from "../supabase"
+import { type IModel } from "~/domain/core/interfaces/model.interface"
 
 
-export interface ICategoryModel {
-    id: number
+export interface ICategoryModel extends IModel {
+    //id: number
     name: string
     created_at: any
     update_at: any

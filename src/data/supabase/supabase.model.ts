@@ -1,4 +1,4 @@
-import { Model } from "~/domain/interfaces/model.interface"
+import { Model } from "~/domain/core/interfaces/model.interface"
 import { type IDataResponse } from "~/domain/dtos/app.dto"
 import { type DBSupabase } from "./supabase"
 

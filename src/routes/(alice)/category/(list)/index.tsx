@@ -8,7 +8,7 @@ import type { ICategoryEntity } from "~/domain/entity/category.entity";
 import { Modal } from '~/components/shared/modal/Modal';
 import { ListCategory } from "~/components/category/ListCategory";
 import { FormCategory } from "~/components/category/FormCategory";
-import { Pagination } from "~/domain/models/pagination.model";
+import { Pagination } from "~/domain/core/models/pagination.model";
 
 
 export const useGetCategoryList = routeLoader$<IListCategoryDto>(async (requestEvent) => {

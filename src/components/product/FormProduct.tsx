@@ -91,7 +91,7 @@ export const FormProduct = component$<FormProductProps>(({
                     <input name="price" bind: value={priceSignal} />
                 </div>
 
-                <button type="submit" class={`button ${submitAction.value?.success? 'hidden':''}`}>{
+                <button type="submit" class={`button`}>{
                     (typeAction == AppConfig.ACTION.insert)
                         ? 'Agregar'
                         : 'Actualizar'

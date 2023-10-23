@@ -1,7 +1,7 @@
 import { type RequestEventBase } from "@builder.io/qwik-city";
 import { createServerClient } from 'supabase-auth-helpers-qwik';
 import { envs } from "~/config/envs";
-import { DB } from "../../domain/interfaces/db.interface";
+import { DB } from "../../domain/core/interfaces/db.interface";
 import { type IDataResponse } from "~/domain/dtos/app.dto";
 
 export interface ISupabaseResponse {
