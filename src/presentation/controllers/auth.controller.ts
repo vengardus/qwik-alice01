@@ -3,12 +3,12 @@ import { type IUserEntity } from "~/domain/entity/user.entity";
 import { JoseAdapter } from "~/config/jose";
 import { AppConfig } from "~/domain/app.config";
 import { envs } from "~/config/envs";
-import { DBSupabase } from "~/data/supabase/supabase";
+import { DBSupabase } from "~/infrastructure/data/supabase/supabase";
 import { type ILoginUserDto } from "~/domain/dtos/auth.dto";
 import { AuthRepositoryImpl } from "~/infrastructure/repository/auth.repository.impl";
 import { AuthDatasourceImpl } from "~/infrastructure/datasource/auth.datasource.impl";
 import { CustomMessages } from "~/domain/messages/customMessages";
-import { UserModel } from "~/data/supabase/models/user.model";
+import { UserModel } from "~/infrastructure/data/supabase/models/user.model";
 import { type IRegisterUserDto } from "~/domain/dtos/user.dto";
 
 

@@ -1,13 +1,14 @@
-import { component$, type Signal, $, useSignal, type PropFunction } from "@builder.io/qwik";
+import { component$, type Signal, $, useSignal, type PropFunction} from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 import { AppConfig } from "~/domain/app.config";
+import { type IProductEntity } from "~/domain/entity/product.entity";
 import { CustomMessages } from "~/domain/messages/customMessages";
 import { useRegisterProduct } from "~/routes/(alice)/product/(list)";
 
 
-export interface FormProductProps {
+export interface FormListViewProps {
     typeAction: string
-    initInputs$: PropFunction<() => void>
+    initInputs$: PropFunction<() => IProductEntity>
     // fields form
     idSignal: Signal<string>
     nameSignal: Signal<string>
@@ -16,7 +17,7 @@ export interface FormProductProps {
     priceSignal: Signal<string>
 }
 
-export const FormProduct = component$<FormProductProps>(({
+export const FormListView = component$<FormListViewProps>(({
     typeAction,
     initInputs$,
     // fields form
@@ -50,7 +51,7 @@ export const FormProduct = component$<FormProductProps>(({
                 : `${CustomMessages.msgUpdateError()}: ${submitAction.value?.message}`
             return;
         }
-        initInputs$()
+        await initInputs$()
         msgFormSignal.value = (typeAction == AppConfig.ACTION.insert)
             ? CustomMessages.msgInsertOk()
             : CustomMessages.msgUpdateOk()

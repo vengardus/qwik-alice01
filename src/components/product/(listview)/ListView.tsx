@@ -1,28 +1,22 @@
-import { type PropFunction, component$ } from "@builder.io/qwik";
-import { ItemProduct } from "./ItemProduct";
-import { ListViewFooter } from "../shared/listview/ListViewFooter";
-import { ListViewHeader } from "../shared/listview/ListViewHeader";
-import { ListViewDatatHeader } from "../shared/listview/ListViewDataHeader";
+import { component$ } from "@builder.io/qwik";
+import { ItemListView } from "./ItemListView";
+import { ListViewFooter } from "../../shared/listview/ListViewFooter";
+import { ListViewHeader } from "../../shared/listview/ListViewHeader";
+import { ListViewDatatHeader } from "../../shared/listview/ListViewDataHeader";
 import { type IListProductDto } from "~/domain/dtos/product.dto";
 import { type IProductEntity } from "~/domain/entity/product.entity";
-import { ProductModel } from "~/data/supabase/models/product.model";
+import { ProductModel } from "~/infrastructure/data/supabase/models/product.model";
+import { type ListViewProps } from "~/domain/core/interfaces/listview.interface";
 
 
-export interface ListProductProps {
-    productList: IListProductDto,
-    insertAction$: PropFunction<() => void>,
-    editAction$: PropFunction<(data: IProductEntity) => void>,
-    deleteAction$: PropFunction<(id: number) => void>,
-    paginationAction$: PropFunction<(typeAction: string) => void>,
-}
-
-export const ListProduct = component$<ListProductProps>(({
-    productList,
+export const ListView = component$<ListViewProps<IListProductDto, IProductEntity>>(({
+    dataList,
     insertAction$,
     editAction$,
     deleteAction$,
     paginationAction$,
 }) => {
+    
     return (
         <div class="flex flex-col space-y-3 w-full">
             <ListViewHeader
@@ -40,12 +34,12 @@ export const ListProduct = component$<ListProductProps>(({
                 <div class='w-1/12'>.</div>
             </ListViewDatatHeader>
 
-            {/* ListViewData */}
+            {/* ListViewItem */}
             <div class="flex flex-col space-y-2"> {
-                productList.data?.map(product => (
-                    <ItemProduct
-                        key={product.id}
-                        product={product}
+                dataList.data?.map(item => (
+                    <ItemListView
+                        key={item.id}
+                        item={item}
                         editAction$={editAction$}
                         deleteAction$={deleteAction$}
                     />
@@ -54,7 +48,7 @@ export const ListProduct = component$<ListProductProps>(({
 
             <ListViewFooter
                 paginationAction$={(typeAction: string) => paginationAction$(typeAction)}
-                pagination={{ offset: productList.pagination?.offset?? 0, count: productList.pagination?.count?? 0 }}
+                pagination={{ offset: dataList.pagination?.offset?? 0, count: dataList.pagination?.count?? 0 }}
             />
         </div>
     )

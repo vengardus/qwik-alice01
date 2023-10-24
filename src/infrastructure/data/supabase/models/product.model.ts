@@ -1,9 +1,10 @@
 import { SupabaseModel } from "../supabase.model"
 import { type DBSupabase } from "../supabase"
 import { type IModel } from "~/domain/core/interfaces/model.interface"
+import { type IProductEntity } from "~/domain/entity/product.entity"
 
 
-export interface IProductModel extends IModel{
+export interface IProductModel extends IModel {
     //id: number
     name: string
     description: string
@@ -51,19 +52,13 @@ export class ProductModel extends SupabaseModel {
         }]
     }
 
-    static initInputs(): {
-        id: string,
-        description: string,
-        name: string,
-        currency: string,
-        price: string
-    } {
+    static initInputs(): IProductEntity {
         return {
-            id: '',
+            id: 0,
             description: '',
             name: '',
             currency: 'USD',
-            price: '',
+            price: 0,
         }
     }
 }

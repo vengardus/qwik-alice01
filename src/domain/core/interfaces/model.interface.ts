@@ -1,4 +1,5 @@
 import { type IDataResponse } from "~/domain/dtos/app.dto"
+import { IEntity } from "./entity.interface"
 
 
 export interface IModel {
@@ -29,9 +30,12 @@ export abstract class Model {
         return [undefined, object]
     }
 
-    static initInputs(): { [key: string]: string } {
-        return {}
+    static initInputs(): IEntity {
+        return {} as IEntity 
     }
+    // static initInputs(): { [key: string]: string } {
+    //     return {}
+    // }
 
     abstract getAll(): Promise<IDataResponse>
 

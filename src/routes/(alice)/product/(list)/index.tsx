@@ -6,10 +6,10 @@ import { CustomMessages } from "~/domain/messages/customMessages";
 import { AppConfig } from "~/domain/app.config";
 import type { IProductEntity } from "~/domain/entity/product.entity";
 import { Modal } from '~/components/shared/modal/Modal';
-import { ListProduct } from "~/components/product/ListProduct";
-import { FormProduct } from "~/components/product/FormProduct";
+import { ListView } from "~/components/product/(listview)/ListView";
+import { FormListView } from "~/components/product/(listview)/FormListView";
 import { Pagination } from "~/domain/core/models/pagination.model";
-import { ProductModel } from "~/data/supabase/models/product.model";
+import { ProductModel } from "~/infrastructure/data/supabase/models/product.model";
 
 
 export const useGetProductList = routeLoader$<IListProductDto>(async (requestEvent) => {
@@ -27,6 +27,9 @@ export const useDeleteProduct = routeAction$(async (object, requestEvent) => {
     return data
 })
 
+/* Personalizado *******************************************  
+    fieldsForm en zod$
+*/
 export const useRegisterProduct = routeAction$(async (product, requestEvent) => {
     const oProductController = new ProductController(requestEvent)
     let data
@@ -34,7 +37,6 @@ export const useRegisterProduct = routeAction$(async (product, requestEvent) => 
         data = await oProductController.insert(product)
     else {
         const id = parseInt(product.id)
-        const oProductController = new ProductController(requestEvent)
         data = await oProductController.update(id, product)
     }
     if (!data.success)
@@ -64,11 +66,11 @@ export const usePaginationProduct = routeAction$(() => {
 
 
 export default component$(() => {
+    const location = useLocation()
+    const nav = useNavigate()
     const productListResponse = useGetProductList()
     const deleteActionRoute = useDeleteProduct()
     const paginationActionRoute = usePaginationProduct()
-    const location = useLocation()
-    const nav = useNavigate()
     interface IComponentStore {
         msgLoading: string
         typeAction: string
@@ -80,7 +82,9 @@ export default component$(() => {
         showModal: false
     })
 
-    // fields
+    /* Personalizado **************************************
+        fieldsForm
+    */
     const idSignal = useSignal('');
     const nameSignal = useSignal('');
     const descriptionSignal = useSignal('');
@@ -96,23 +100,29 @@ export default component$(() => {
         componentStore.showModal = false
     });
 
-    const initInputs = $(() => {
+    /* Personalizado ****************************************
+        initData fieldsForm
+    */    
+    const initInputs = $(():IProductEntity => {
         const data = ProductModel.initInputs()
-        idSignal.value = data.id
+        idSignal.value = data.id.toString()
         descriptionSignal.value = data.description
         nameSignal.value = data.name
         currencySignal.value = data.currency
-        priceSignal.value = data.price;
+        priceSignal.value = data.price.toString();
+        return data
     })
 
     const insertAction = $(() => {
-        componentStore.typeAction = AppConfig.ACTION.insert
         initInputs()
+        componentStore.typeAction = AppConfig.ACTION.insert
         showModalCallback()
     })
 
+    /* Perosnalizado **************************************
+        set fields form
+    */
     const editAction = $((product: IProductEntity) => {
-        // set fields form
         idSignal.value = product.id.toString();
         nameSignal.value = product.name;
         descriptionSignal.value = product.description;
@@ -149,8 +159,8 @@ export default component$(() => {
 
     return (
         <>
-            <ListProduct
-                productList={productListResponse.value}
+            <ListView
+                dataList={productListResponse.value}
                 insertAction$={() => insertAction()}
                 editAction$={(product: IProductEntity) => editAction(product)}
                 deleteAction$={(id: number) => deleteAction(id)}
@@ -170,10 +180,12 @@ export default component$(() => {
             >
                 <span q: slot='title' class='text-blue-700'></span>
                 <div q: slot='content' class='flex flex-col justify-center items-center'>
-                    <FormProduct
+                    <FormListView
                         typeAction={componentStore.typeAction}
                         initInputs$={initInputs}
-                        //fields
+                        /* Personalizado ***********************************
+                            fields
+                        */
                         idSignal={idSignal}
                         nameSignal={nameSignal}
                         descriptionSignal={descriptionSignal}

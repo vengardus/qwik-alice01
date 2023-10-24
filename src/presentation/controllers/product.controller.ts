@@ -1,6 +1,6 @@
 import { type RequestEventBase } from "@builder.io/qwik-city";
-import { ProductModel } from "~/data/supabase/models/product.model";
-import { DBSupabase } from "~/data/supabase/supabase";
+import { ProductModel } from "~/infrastructure/data/supabase/models/product.model";
+import { DBSupabase } from "~/infrastructure/data/supabase/supabase";
 import type { IDataResponse } from "~/domain/dtos/app.dto";
 import type { IListProductDto } from "~/domain/dtos/product.dto";
 import { ProductMapper } from "~/infrastructure/mappers/product.mapper";

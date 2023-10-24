@@ -1,4 +1,4 @@
-import type { IUserModel } from "~/data/supabase/models/user.model";
+import type { IUserModel } from "~/infrastructure/data/supabase/models/user.model";
 import type { IUserEntity } from "~/domain/entity/user.entity";
 
 export class UserMapper {

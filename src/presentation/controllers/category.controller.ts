@@ -1,6 +1,6 @@
 import { type RequestEventBase } from "@builder.io/qwik-city";
-import { CategoryModel } from "~/data/supabase/models/category.model";
-import { DBSupabase } from "~/data/supabase/supabase";
+import { CategoryModel } from "~/infrastructure/data/supabase/models/category.model";
+import { DBSupabase } from "~/infrastructure/data/supabase/supabase";
 import type { IDataResponse } from "~/domain/dtos/app.dto";
 import type { IListCategoryDto } from "~/domain/dtos/category.dto";
 import { CategoryMapper } from "~/infrastructure/mappers/category.mapper";

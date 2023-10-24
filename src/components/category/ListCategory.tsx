@@ -5,7 +5,7 @@ import { ListViewHeader } from "../shared/listview/ListViewHeader";
 import { ListViewDatatHeader } from "../shared/listview/ListViewDataHeader";
 import { type IListCategoryDto } from "~/domain/dtos/category.dto";
 import { type ICategoryEntity } from "~/domain/entity/category.entity";
-import { CategoryModel } from "~/data/supabase/models/category.model";
+import { CategoryModel } from "~/infrastructure/data/supabase/models/category.model";
 
 
 export interface ListCategoryProps {

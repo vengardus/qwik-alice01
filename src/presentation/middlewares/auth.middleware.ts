@@ -1,8 +1,8 @@
 import { type RequestEventBase } from "@builder.io/qwik-city";
 import { envs } from "~/config/envs";
 import { JoseAdapter } from "~/config/jose";
-import { UserModel } from "~/data/supabase/models/user.model";
-import { DBSupabase } from "~/data/supabase/supabase";
+import { UserModel } from "~/infrastructure/data/supabase/models/user.model";
+import { DBSupabase } from "~/infrastructure/data/supabase/supabase";
 import { AppConfig } from "~/domain/app.config";
 import { type IUserEntity } from "~/domain/entity/user.entity";
 import { CustomMessages } from "~/domain/messages/customMessages";

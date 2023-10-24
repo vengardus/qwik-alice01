@@ -1,4 +1,4 @@
-import { type UserModel } from "~/data/supabase/models/user.model";
+import { type UserModel } from "~/infrastructure/data/supabase/models/user.model";
 import { type AuthDatasource } from "~/domain/datasource/auth.datasource";
 import { type ILoginUserDto } from "~/domain/dtos/auth.dto";
 import { type IUserEntity } from "~/domain/entity/user.entity";
